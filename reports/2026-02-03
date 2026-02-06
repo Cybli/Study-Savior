@@ -1,0 +1,34 @@
+# ---<br>CS 362 course project<br>---
+
+## Team report (status update for your TA, including an agenda for the project standup meeting).
+  - Last week plans and goals.
+    - Develop a tiered approach to data workflow and create compelling visualization (2 Days)
+    - Tidying up living document (1 Day)
+    - Select style guidelines for each programming language (1 Day)
+  - Progress and issues
+    - DONE: Developed a data workflow and created a visualization
+    - DONE: Tidied up living document (1 Day)
+    - DONE: Selected style guidelines for HTML, CSS, JS, and MySQL
+    - DONE: Finalized tools and services used for implementation
+  - Plans and goals (measurable)
+    - Finish living document (3 days)
+    - Complete slideshow for midterm presentation (7 Days)
+    - Read and familiarize with TailwindCSS documentation (3 days)
+    - Create a rough mockup of frontend design (7 Days)
+
+## Contributions of individual team members
+  -Last week plans and goals
+   - Sophie: Create visual for database workflow
+    - Samuel: Implement Leaflet integration and basic map setup for OSU campus, create consistent system across front and backend for identifying locations based on coordinates
+    - Nat: Begin mockups for more of the frontend UI/UX to help finalize designs
+    - Beck: Push forward on implementing a basic webpage that we can use to test our UI/UX ideas on 
+  - Who did what
+    - DONE: Sophie, Created visual for database workflow and attended group meetings.
+    - DONE: Nat, Selected style guidelines, organized and attended team meeting outside of class hours
+    - DONE: Beck, Began implementing skeleton of the frontend web architecture. 
+    - DONE: Sam, Researched leaflet, started basic implementation and attended team meetings
+  - Who plans on doing what
+    - Sophie: Work on living document and slides.
+    - Nat: Organize another meeting for team members to interact and solidify slide design. Work on the slideshow for our midterm presentation.
+    - Beck: Work on midterm slides, become familiar with TailwindCSS.
+    - Sam: Work on midterm presentation and living document, work with team on frontend design
