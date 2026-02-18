@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "forever": "^4.0.3",
+    "mysql2": "^3.17.2"
+  }
+}
