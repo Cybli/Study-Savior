@@ -1,0 +1,11 @@
+#Node Modules
+node_modules/
+
+#Database Login
+dbconnector.js
+
+#Environement Vars
+.env
+
+# Logs
+npm-debug.log*
