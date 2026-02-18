@@ -9,3 +9,6 @@ dbconnector.js
 
 # Logs
 npm-debug.log*
+
+# Packages
+package-lock.json
