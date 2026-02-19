@@ -1,10 +1,28 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 function App() {
     const mapContainer = useRef(null);
     const map = useRef(null);
+    const [locations, setLocations] = useState([]);
+
+    /*To use:
+        To use information stored in a location use location.NAME_OF_COLUMN_IN_DATABASE
+        For example:
+            To get the name of a location use location.name_location
+    */
+
+    //Fetch locations from backend
+    useEffect(() => {
+        //TODO: REPLACE WITH BACKEND URL
+        fetch('http://localhost:4000/locations')
+            .then(res => res.json())            //Gather information in json format
+            .then(data => {
+                setLocations(data);  //Store data in setLocations
+            })
+            .catch(err => console.error('Failed to fetch locations:', err));
+    }, []);
 
     useEffect(() => {
         // Return map a single time
@@ -24,14 +42,30 @@ function App() {
             // Required by OSM's license, adds copyright to bottom right of page
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map.current);
-
-        // Add marker at OSU campus (placeholder)
-        const marker = L.marker(osuCoords).addTo(map.current);
-        marker.bindPopup(
-            "<b>Oregon State University</b><br>Corvallis, Oregon<br>"
-        ).openPopup();
-
     }, []);
+
+    // Add location markers to map
+    useEffect(() => {
+        if (!map.current || locations.length === 0) return; //Check if map exists and there are locations
+        
+        //Wait for map to load
+        map.current.whenReady(() => {
+            //For each location in the database
+            locations.forEach(location => {
+                if (!location.lat || !location.lng) return; //Check if there are latitude and longitude in the db
+                const marker = L.marker([location.lat, location.lng]).addTo(map.current); //Create a marker and add it to the map
+                //Populate the marker with info from database
+                //TODO: REPLACE WITH SIDE BAR
+                marker.bindPopup(`
+                        <b>${location.name_location}</b><br>
+                        ${location.description_location}<br>
+                        Rating: ${location.average_rating_location ?? 'No ratings yet'}
+                `);
+            });
+    }, [locations]);
+
+    
+});
 
     return(
         <div className="w-full h-screen flex flex-col">
