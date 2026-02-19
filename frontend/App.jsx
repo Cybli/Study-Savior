@@ -24,17 +24,16 @@ function App() {
             .catch(err => console.error('Failed to fetch locations:', err));
     }, []);
 
-    useEffect(() => {
-        // Return map a single time
-        if (map.current) return; 
+  useEffect(() => {
+    // Return map a single time
+    if (map.current) return;
 
-        // OSU Coordinates set
-        const osuCoords = [44.5646, -123.2800];
-        const zoomLevel = 15;
+    // OSU Coordinates set
+    const osuCoords = [44.5646, -123.2800];
+    const zoomLevel = 15;
 
-        // Init map
-        map.current = L.map(mapContainer.current).setView(osuCoords, zoomLevel);
-
+    // Init map
+    map.current = L.map(mapContainer.current).setView(osuCoords, zoomLevel);
         // Add OSM tile layer (z = zoom, x = horizontal tile coordinate, y = vertical tile coordinate)
         // Values automatically updated by leaflet as the user pans and zooms
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -47,7 +46,6 @@ function App() {
     // Add location markers to map
     useEffect(() => {
         if (!map.current || locations.length === 0) return; //Check if map exists and there are locations
-        
         //Wait for map to load
         map.current.whenReady(() => {
             //For each location in the database

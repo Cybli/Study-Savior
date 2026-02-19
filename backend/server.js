@@ -41,5 +41,5 @@ app.get('/locations/:id', async (req, res) => { // /locations/ENTERID
 });
 
 app.listen(PORT, () => {
-    console.log('Server running on port ${PORT}');
+    console.log(`Server running on port ${PORT}`);
 });
