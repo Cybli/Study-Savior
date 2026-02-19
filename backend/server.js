@@ -20,13 +20,13 @@ app.use(cors());
 
 //All Locations
 app.get('/locations', async (req, res) => { // the /locations address will fetch the locations from the database
-    try{
-        //Query the rows from the database
-        const [rows] = await pool.query('SELECT * FROM location');
-        res.json(rows); //Return the result of the query in json format
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+  try {
+    //Query the rows from the database
+    const [rows] = await pool.query('SELECT * FROM location');
+    res.json(rows); //Return the result of the query in json format
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 //Locations with specific id
@@ -41,5 +41,5 @@ app.get('/locations/:id', async (req, res) => { // /locations/ENTERID
 });
 
 app.listen(3000, () => {
-    console.log('Server running on port 3000');
+  console.log('Server running on port 3000');
 });
