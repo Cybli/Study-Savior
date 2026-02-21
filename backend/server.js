@@ -14,6 +14,10 @@ const pool = require('./dbconnector'); //
 const cors = require('cors');
 app.use(cors());
 
+//Bcrypt hashing
+const bcrypt = require('bcrypt');
+const SALT_ROUNDS = 10;
+
 /*
     ROUTES
 */
@@ -38,6 +42,33 @@ app.get('/locations/:id', async (req, res) => { // /locations/ENTERID
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+//Register new user
+app.post('/register', async (req, res) => {
+    //Init vars to hold username and password
+    const { username, password } = req.body;
+    try {
+        //Check is username has been taken
+        const [existing] = await pool.query('SELECT * FROM user WHERE username_user = ?', [username]);
+        //If any matching usernames are found send error
+        if (existing.length > 0) return res.status(400).json({ error: 'Username already taken' });
+
+        //Generate salt
+        const salt = await bcrypt.genSalt(SALT_ROUNDS);
+        //Hash password
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        //Insert into db
+        await pool.query(
+           'INSERT INTO user (username_user, salt_user, hashedpass_user) VALUES (?, ?, ?)',
+            [username, salt, hashedPassword] 
+        );
+
+        res.json({ message: 'Account created successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 app.listen(PORT, () => {

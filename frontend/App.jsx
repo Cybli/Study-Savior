@@ -16,6 +16,7 @@ function App() {
     //Fetch locations from backend
     useEffect(() => {
         //TODO: REPLACE WITH BACKEND URL
+        //TODO: USE HTTPS FOR ENCRYPTION SENDING USER PASSWORDS
         fetch('http://localhost:4000/locations')
             .then(res => res.json())            //Gather information in json format
             .then(data => {
