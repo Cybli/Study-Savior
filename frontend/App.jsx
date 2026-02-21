@@ -39,7 +39,9 @@ function App() {
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             // Required by OSM's license, adds copyright to bottom right of page
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            // Sets the number of tiles/columns kept when panning
+            keepBuffer: 100
         }).addTo(map.current);
     }, []);
 
