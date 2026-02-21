@@ -13,6 +13,7 @@ const pool = require('./dbconnector'); //
 //Communication to front end
 const cors = require('cors');
 app.use(cors());
+app.use(express.json());
 
 //Bcrypt hashing
 const bcrypt = require('bcrypt');
@@ -44,7 +45,14 @@ app.get('/locations/:id', async (req, res) => { // /locations/ENTERID
   }
 });
 
+
 //Register new user
+/*
+Can return 3 things:
+    - 'Username already taken'
+    - 'Account created successfully'
+    - or an error message
+*/
 app.post('/register', async (req, res) => {
     //Init vars to hold username and password
     const { username, password } = req.body;
@@ -70,6 +78,38 @@ app.post('/register', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+
+//Login a user
+/*
+Can return 3 things:
+    - 'Invalid username or password'
+    - 'Logic successful'
+    - or an error message
+*/
+app.post('/login', async (req, res) => {
+    //Init vars to hold username and password
+    const { username, password } = req.body;
+    try{
+        //Find the user
+        const [rows] = await pool.query('SELECT * FROM user WHERE username_user = ?', [username]);
+        //If no user is found error
+        if (rows.length === 0) return res.status(401).json({ error: 'Invalid username or password' });
+        
+        const user = rows[0];
+
+        //Check for valid password
+        const match = await bcrypt.compare(password, user.hashedpass_user);
+        if (!match) return res.status(401).json({ error: 'Invalid username or password' });
+
+        //If user is found return their id and username
+        res.json({ message: 'Login successful', id_user: user.id_user, username: user.username_user });
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
+});
+
+
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
