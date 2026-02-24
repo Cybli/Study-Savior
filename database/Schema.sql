@@ -1,4 +1,3 @@
-
 -- Enter the name of your database
 SET @DATABASE_NAME = 'cs362_rurkan'
 
