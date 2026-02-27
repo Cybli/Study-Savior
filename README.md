@@ -2,7 +2,7 @@
 
 > Discover the best study spots on the Oregon State University campus.
 
-Study Savior is a campus-focused web app that helps OSU students find, rate, and review study locations across campus. Browse an interactive map, read reviews from fellow students, and share your favorite hidden study spots.\
+Study Savior is a campus-focused web app that helps OSU students find, rate, and review study locations across campus. Browse an interactive map, read reviews from fellow students, and share your favorite hidden study spots.
 
 ---
 
