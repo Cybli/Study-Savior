@@ -7,7 +7,8 @@ Study Savior is a campus-focused web app that helps OSU students find, rate, and
 ---
 
 ## Preview
-<img width="1818" height="1020" alt="Screenshot 2026-02-23 183755" src="https://github.com/user-attachments/assets/0e9d1278-f8f0-40b2-88ea-e2096fd26832" />
+<img width="1438" height="778" alt="Screenshot_2026-02-27_at_7 00 52_PM" src="https://github.com/user-attachments/assets/cb7bda8e-fd38-4b01-b08a-7133e285b866" />
+
 
 > *Interactive campus map with location details panel — OSU Corvallis*
 
