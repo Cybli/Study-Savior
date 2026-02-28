@@ -140,7 +140,7 @@ When you open Study Savior you'll see an interactive map of OSU's campus (can be
 
 Click the **"Find a Spot!"** search bar at the top center of the screen and type the name of a building or location. Matching results will appear in a dropdown click one to fly the map to that location and open its details.
 
-### Viewing Location Details **- WIP**
+### Viewing Location Details
 
 Click any pin on the map to open the **side panel** on the left. This panel shows:
 - A photo of the location
