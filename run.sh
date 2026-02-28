@@ -5,14 +5,8 @@
 
 # start the server/backend
 cd backend
-npm install express
-npm install cors
-npm install mysql2
-npm install bcrypt
-npm install
 node server.js &
 
 # run the frontend
 cd ../frontend
-npm install
 npm run dev
