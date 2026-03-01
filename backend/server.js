@@ -14,6 +14,8 @@ const pool = require('./dbconnector'); //
 const cors = require('cors');
 app.use(cors());
 app.use(express.json());
+app.use(express.static('../frontend/dist'));
+app.use('/images', express.static('../frontend/public/images'));
 
 //Bcrypt hashing
 const bcrypt = require('bcrypt');

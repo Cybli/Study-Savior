@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { Tag } from 'lucide-react';
+import API_URL from '../config';
 
 export function LocationSidebar({ location, onClose }) {
   const [tags, setTags] = useState([]);
@@ -8,7 +9,7 @@ export function LocationSidebar({ location, onClose }) {
   useEffect(() => {
     setTags([]); // Clear old tags when location changes
     if (location) {
-      fetch(`http://localhost:4000/locations/${location.id_location}/tags`)
+      fetch(`${API_URL}/locations/${location.id_location}/tags`)
         .then(res => res.json())
         .then(data => {
           if (!Array.isArray(data)) return;
