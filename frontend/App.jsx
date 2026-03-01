@@ -2,6 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { LocationSidebar } from './popups/LocationSidebar';
+import API_URL from './config';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+// Fix Leaflet marker icons breaking in Vite builds
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
 
 function App() {
   const mapContainer = useRef(null);
@@ -17,9 +27,9 @@ function App() {
 
   //Fetch locations from backend
   useEffect(() => {
-    //TODO: REPLACE WITH BACKEND URL
+    //TODO: REPLACE WITH BACKEND 
     //TODO: USE HTTPS FOR ENCRYPTION SENDING USER PASSWORDS
-    fetch('http://localhost:4000/locations')
+    fetch(`${API_URL}/locations`)
       .then(res => res.json())            //Gather information in json format
       .then(data => {
         setLocations(data);  //Store data in setLocations

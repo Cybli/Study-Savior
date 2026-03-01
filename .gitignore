@@ -12,3 +12,6 @@ npm-debug.log*
 
 # Packages
 package-lock.json
+
+# Vite generated folders
+frontend/dist
