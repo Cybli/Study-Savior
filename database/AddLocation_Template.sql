@@ -3,13 +3,13 @@
 -- =========================
 -- STEP 1: Add the location
 -- =========================
+-- Tip: Right click a location in Google Maps and click the coordinates to copy them
 INSERT INTO location (name_location, description_location, hall_location, coordinates_location, image_path_location)
 VALUES (
   '<LOCATION NAME>',           
   '<DESCRIPTION>',             
   '<BUILDING NAME>',           
-  ST_GeomFromText('POINT(<LAT> <LNG>)')
-  -- Tip: Right click a location in Google Maps and click the coordinates to copy them
+  ST_GeomFromText('POINT(<LAT> <LNG>)'),
   '/images/<FILE NAME>'
 );
 

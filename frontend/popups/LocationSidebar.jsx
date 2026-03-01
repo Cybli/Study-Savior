@@ -6,10 +6,14 @@ export function LocationSidebar({ location, onClose }) {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
+    setTags([]); // Clear old tags when location changes
     if (location) {
       fetch(`http://localhost:4000/locations/${location.id_location}/tags`)
         .then(res => res.json())
-        .then(data => setTags(data))
+        .then(data => {
+          if (!Array.isArray(data)) return;
+          setTags(data);
+        })
         .catch(err => console.error('Failed to fetch tags:', err));
     }
   }, [location]);
@@ -42,6 +46,19 @@ export function LocationSidebar({ location, onClose }) {
       >
         <X size={20} className="text-gray-600" />
       </button>
+
+      {/* Image */}
+      {location.image_path_location ? (
+        <img
+          src={location.image_path_location}
+          alt={location.name_location}
+          className="w-full h-40 object-cover"
+        />
+      ) : (
+        <div className="w-full h-40 bg-gray-200 flex items-center justify-center text-gray-400 text-sm">
+          No image available
+        </div>
+      )}
 
       {/* Header */}
       <div className="bg-linear-to-r from-orange-600 to-orange-500 text-white p-4">
