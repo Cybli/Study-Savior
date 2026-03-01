@@ -5,8 +5,10 @@
 
 # start the server/backend
 cd backend
+npm install
 node server.js &
 
 # run the frontend
 cd ../frontend
+npm install
 npm run dev
