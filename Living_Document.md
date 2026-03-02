@@ -134,7 +134,7 @@ Create an account
 * Steps  
   * User attempts to create a new account  
   * They are prompted to create a username and password  
-    * Passwords are encrypted with AES-256 with salt added and stored in our database  
+    * Passwords are encrypted with bcrypt with salt added and stored in our database  
     * Salt and usernames are stored in database   
 * Extensions/Variations  
   * Adding a profile picture  
@@ -303,7 +303,7 @@ The interactive map will be integrated via external APIs
 * **Likelihood of Occurrence: Medium \-** Low  
 * **Impact:** Very High  
 * **Evidence for Estimation:**  
-  * Handling user passwords with AES-256 with salt  
+  * Handling user passwords with bcrypt with salt  
   * Public facing web application vulnerable to common attacks  
   * No current plans for security testing  
   * Data breach would damage credibility leak user data  
@@ -378,11 +378,11 @@ The interactive map will be integrated via external APIs
 ## **Team process description**
 
 * Specify and justify the software toolset you will use.  
-  * HTML  
-    * The language HTML is essential for designing web based applications.   
-  * Leaflet for access data from OpenStreetMap  
-    * OpenStreetMap provides open source map data, and as long as citation is provided as to our usage of OpenStreetMap, it comes at no cost.  
-    * Leaflet is an easy to use tool for adding custom nodes and points of interest to the map provided by OpenStreetMap. This software will help us in scaling high density zones such as the library into subgroups and provide better visualization for our end users.  
+  * React  
+    * The React language is essential for designing web-based applications.   
+  * Leaflet for accessing data from OpenStreetMap  
+    * OpenStreetMap provides open source map data, and as long as a citation is provided for our usage of OpenStreetMap, it comes at no cost.  
+    * Leaflet is an easy-to-use tool for adding custom nodes and points of interest to the map provided by OpenStreetMap. This software will help us scale high-density zones, such as the library, into subgroups and give our users better visualization.  
   * JS/NodeJS  
     * JS and NodeJS are both incredibly common tools in industry environments and are completely free to use. The large amount of documentation that already exists due to the aforementioned reasons also helped a lot in our decision to use these resources.  
   * MySQL  
@@ -402,7 +402,7 @@ The interactive map will be integrated via external APIs
     * Group Manager  
       * The core portion of my responsibilities is organizing the group to meet up throughout the term, so we stay on track, and helping to resolve disputes between group members, if they may arise.
 
-## **Software itecture:**
+## **Software Architecture:**
 
 ### **Architecture Flow Diagram:**
 
@@ -410,13 +410,13 @@ The interactive map will be integrated via external APIs
 
 #### **Connection Layer:**
 
-* Our current plan is to use Node.js to connect our frontend user interface to our backend database, we chose this as it offers the right amount of functionality for our project while also keeping development simple  
-  * Our alternative to Node.js is Next.js combined with Prisma. These two softwares combine to elaborate upon Node.js adding a host of features for an enterprise workflow
+* Our current plan is to use Node.js to connect our frontend user interface to our backend database. We chose this as it offers the right amount of functionality for our project while also keeping development simple  
+  * Our alternative to Node.js is Next.js combined with Prisma. These two software combine to elaborate upon Node.js, adding a host of features for an enterprise workflow
 
-#### **Database itecture:**
+#### **Database Architecture:**
 
-* The database itecture we landed on is MySQL. We feel that we are the most comfortable working with this itecture and it provides everything we need for our backend database. There is also a host of support and services offered by OSU for MySQL databases  
-  * The alternative we have chosen to MySQL is Supabase running the PostgreSQL itecture. We chose it as our backup because it offers robust tools for user authentication and password storage with intelligent salting and hashing to maintain privacy and security. The main disadvantage is its complexity and our lack of comfortability with the platform.
+* The database architecture we landed on is MySQL. We feel that we are the most comfortable working with this architecture and it provides everything we need for our backend database. There is also a host of support and services offered by OSU for MySQL databases  
+  * The alternative we have chosen to MySQL is Supabase, running the MySQL architecture. We chose it as our backup because it offers robust tools for user authentication and password storage with intelligent salting and hashing to maintain privacy and security. The main disadvantage is its complexity and our lack of comfortability with the platform.
 
 ### **Database Entity Relationship Diagram:**
 
@@ -427,7 +427,7 @@ The interactive map will be integrated via external APIs
 
 ### **User Interface Component (Frontend)**
 
-**Technology:** HTML \+ JS
+**Technology:** React \+ JSX/Leaflet
 
 **What it is:** The presentation layer that users interact with directly through their web browser.
 
@@ -531,12 +531,60 @@ To enforce we will go over code before commits and have teammates review for iss
 
 ### **Test plan & bugs**
 
-We require that you use GitHub Issues to track bugs that occur during use and testing.
+#### **Test Automation**
 
-Main Methods: 
+We use **[Jest](https://jestjs.io/)** as our test automation framework for our backend.
 
-* Internal Bug Testing Sessions  
-* Closed Testing Sessions
+**Why Jest?**
+
+
+ **Familiarity** — Jest is the most widely used JavaScript testing framework and integrates naturally with Node.js projects
+- **Zero config** — Works out of the box with no complex setup required
+- **Built-in coverage** — Jest includes code coverage reporting without needing additional tools
+- **Async support** — Handles async/await testing natively, which is essential for testing database queries and API routes
+- **Consistency** — Since the project is already fully JavaScript (Node.js backend, React frontend), Jest can test both without switching frameworks
+
+
+### CI Service: GitHub Actions
+
+We use **GitHub Actions** as our CI service. The repository is hosted on GitHub at https://github.com/Cybli/Study-Savior, and GitHub Actions is configured directly within the repository
+
+**Why GitHub Actions?**
+
+- **Built into GitHub** — No external account or service linking required. Since the project is already on GitHub, Actions is available immediately with no setup overhead
+- **Free for public repositories** — No cost for our use case
+- **Simple YAML configuration** — Workflow files are straightforward and well documented
+- **Large marketplace** — Thousands of pre-built actions available for common tasks
+
+**CI Pros/Cons Matrix**
+
+| Feature | GitHub Actions | Travis CI | CircleCI |
+|---------|---------------|-----------|----------|
+| GitHub integration | Native |  ood | Good |
+| Free tier | Free for public repos | Limited free tier | Limited free tier |
+| Setup complexity |  Low | Low |  Medium |
+| Configuration format | YAML | YAML | YAML |
+| Marketplace/plugins | Large | Smaller | Smaller |
+| Self-hosted runners | Yes | No | Yes |
+| Documentation quality | Excellent | Good | Good |
+| Best for | GitHub projects | Open source | Large teams |
+
+
+**Decision:** GitHub Actions was the clear choice given the project is already on GitHub, the free tier covers all our needs, and the native integration means no external service linking is required.
+
+**Which Tests Run in a CI Build**
+
+Every CI build runs:
+- All Jest unit tests
+- All route integration tests via supertest
+
+**What Triggers a CI Build**
+
+A CI build is triggered automatically when:
+- A **push** is made to the `main` branch
+- A **pull request** is opened or updated targeting the `main` branch
+
+This ensures all code merged into `main` has passed the test suite, and pull requests from teammates are validated before merging.
 
 For internal bug testing we will be going through our entire application, login/logout, interacting with the map (loading new areas, zooming in/out), creating reviews, creating tags, adding photos, and adding new study areas (as admins). We will be testing all of these for previously laid out non-functional requirements such as response times, any lost data between the frontend and the database and the security of queries and passwords.
 
