@@ -3,12 +3,14 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { LocationSidebar } from './popups/LocationSidebar';
 import API_URL from './config';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIconRetina from "leaflet/dist/images/marker-icon-2x.png"; // Without this, it the icon will not properly display
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 // Fix Leaflet marker icons breaking in Vite builds
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIconRetina,
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
 });
