@@ -39,9 +39,9 @@ export function LocationSidebar({ location, onClose }) {
   const comfort = location.average_comfort_location || 0;
 
   return (
-    <div className="fixed left-4 top-24 bottom-4 w-96 bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col z-1000 border-2 border-black">
+    <div className="absolute left-4 top-2.75 bottom-4 w-96 bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col z-1000 border-2 border-black">
       {/* Close button */}
-      <button 
+      <button
         onClick={onClose}
         className="absolute top-2 right-2 p-1 rounded-full hover:bg-gray-200 z-10"
       >
@@ -101,7 +101,7 @@ export function LocationSidebar({ location, onClose }) {
                 </span>
               ))
             ) : (
-              <p className="text-gray-500 text-sm"><Tag/>No tags</p>
+              <p className="text-gray-500 text-sm"><Tag />No tags</p>
             )}
           </div>
         </div>
@@ -113,7 +113,7 @@ export function LocationSidebar({ location, onClose }) {
 
         {/* Review Button */}
         <div className="p-3">
-          <button 
+          <button
             className="w-full py-2 px-4 border-2 border-blue-500 text-blue-500 font-semibold rounded-full hover:bg-blue-500 hover:text-white transition-all text-sm"
             onClick={() => alert('Review feature coming soon!')}
           >

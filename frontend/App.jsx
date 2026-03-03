@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { LocationSidebar } from './popups/LocationSidebar';
+import { SearchBar } from './searchbar/SearchBar';
 import API_URL from './config';
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIconRetina from "leaflet/dist/images/marker-icon-2x.png"; // Without this, it the icon will not properly display
@@ -48,7 +49,7 @@ function App() {
     const zoomLevel = 15;
 
     // Init map
-    map.current = L.map(mapContainer.current).setView(osuCoords, zoomLevel);
+    map.current = L.map(mapContainer.current, { zoomControl: false }).setView(osuCoords, zoomLevel);
     // Add OSM tile layer (z = zoom, x = horizontal tile coordinate, y = vertical tile coordinate)
     // Values automatically updated by leaflet as the user pans and zooms
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -58,6 +59,9 @@ function App() {
       // Sets the number of tiles/columns kept when panning
       keepBuffer: 100
     }).addTo(map.current);
+
+    // Moves zoom control to the top right, as top left led to it being below our location sidebar
+    L.control.zoom({ position: 'topright' }).addTo(map.current);
   }, []);
 
   // Add location markers to map
@@ -69,7 +73,7 @@ function App() {
       locations.forEach(location => {
         if (!location.lat || !location.lng) return; //Check if there are latitude and longitude in the db
         const marker = L.marker([location.lat, location.lng]).addTo(map.current); //Create a marker and add it to the map
-        
+
         // Add click event to show location in sidebar
         marker.on('click', () => {
           setSelectedLocation(location);
@@ -78,23 +82,44 @@ function App() {
     });
   }, [locations]);
 
-  return(
+  const handleSearchResultClick = (location) => {
+    setSelectedLocation(location);
+
+    if (map.current && location.lat && location.lng) {
+      map.current.flyTo([location.lat, location.lng], 19,
+        {
+          animate: true,
+          duration: 1,
+          // Makes it take a second panning, also not sure if this is the optimal timing, we can ask beta test users!
+          easeLinearity: 0.1
+          // Honestly not entirely sure if this option is doing anything? Feels about the same to me with it set at 1 or 0.1
+          // Theoretically should make it smoother for pan and zoom using bezier curves though... so why not?
+        }
+      );
+    }
+  };
+
+  return (
     <div className="w-full h-screen flex flex-col">
       <div className="bg-linear-to-r from-orange-600 to-orange-500 p-4 shadow-lg">
         <h1 className="text-white text-3xl font-bold">Study Savior</h1>
         <p className="text-orange-100">OSU Campus Study Locations</p>
       </div>
       <div className="relative flex-1">
-        <div 
-          ref={mapContainer} 
+        <div
+          ref={mapContainer}
           className="w-full h-full"
         />
         {selectedLocation && (
-          <LocationSidebar 
-            location={selectedLocation} 
-            onClose={() => setSelectedLocation(null)} 
+          <LocationSidebar
+            location={selectedLocation}
+            onClose={() => setSelectedLocation(null)}
           />
         )}
+        <SearchBar
+          locations={locations}
+          onResultClick={handleSearchResultClick}
+        />
       </div>
     </div>
   );
