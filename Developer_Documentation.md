@@ -123,13 +123,13 @@ Study-Savior/
 | Git | Any recent version | https://git-scm.com |
 | MySQL | v8.0 or higher | https://dev.mysql.com/downloads/ |
 
-### Using run.sh (Recommended)
+### Using runDev.sh (Recommended)
 
 The easiest way to install dependencies and start the app is with the provided script:
 
 ```bash
-chmod +x run.sh
-./run.sh
+chmod +x runDev.sh
+./runDev.sh
 ```
 
 This will install all frontend and backend dependencies and start both servers.
@@ -209,25 +209,24 @@ git pull origin main
 
 3. **Create `dbconnector.js`** on the server if it doesn't exist yet (see [Obtaining the Source Code](#obtaining-the-source-code))
 
-4. **Install dependencies:**
+4. **Update config.js** to contain the URL of your backend
 ```bash
-./run.sh
-```
-Or manually:
-```bash
-cd backend && npm install
-cd ../frontend && npm install && npm run build
+const API_URL = 'http://flip<ENTER FLIP NUMBER>.engr.oregonstate.edu:4000';
+// Local dev
+// const API_URL = 'http://localhost:4000';
+export default API_URL;
 ```
 
-5. **Start the backend with forever:**
+6. **Install dependencies and deploy app:**
 ```bash
-cd backend
-npx forever start server.js
+chmod +x runDeployment.sh
+./runDeployment.sh
 ```
 
-6. **Verify the server is running:**
+6. **If you would like to stop the deployment:**
 ```bash
-npx forever list
+chmod +x stopDeployment.sh
+./stopDeployment.sh
 ```
 
 ### Manual Release Checklist
@@ -237,7 +236,7 @@ Before deploying a new release, verify the following:
 - [ ] All changes are committed and pushed to `main`
 - [ ] `database/Schema.sql` is up to date with any schema changes
 - [ ] Backend port in `server.js` matches the team's assigned flip port
-- [ ] Frontend fetch URLs point to the correct flip server and port (not `localhost`)
+- [ ] Frontend fetch URLs in config.js point to the correct flip server and port (not `localhost`)
 - [ ] No credentials or `.env` secrets are committed to the repository
 - [ ] Test all API routes with curl after deploying (see [Testing the Software](#testing-the-software))
 
