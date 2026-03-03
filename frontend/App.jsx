@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { LocationSidebar } from './popups/LocationSidebar';
-import { SearchBar } from './searchbar/SearchBar';
+import { LocationSidebar } from './components/LocationSidebar';
+import { SearchBar } from './components/SearchBar';
 import API_URL from './config';
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIconRetina from "leaflet/dist/images/marker-icon-2x.png"; // Without this, it the icon will not properly display
@@ -31,7 +31,6 @@ function App() {
   //Fetch locations from backend
   useEffect(() => {
     //TODO: REPLACE WITH BACKEND 
-    //TODO: USE HTTPS FOR ENCRYPTION SENDING USER PASSWORDS
     fetch(`${API_URL}/locations`)
       .then(res => res.json())            //Gather information in json format
       .then(data => {

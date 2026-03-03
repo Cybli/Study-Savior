@@ -6,3 +6,59 @@ html, body, #root {
   padding: 0;
   overflow: auto;
 }
+
+/* Leaflet zoom buttons */
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Move Leaflet zoom buttons to align with search bar */
+.leaflet-top.leaflet-right {
+  top: .5rem !important;
+}
+
+/* Container spacing */
+.leaflet-control-zoom a {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  
+  width: 35px !important;
+  height: 35px !important;
+  
+  border-radius: 9999px !important;
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+  
+  transition: all 0.2s ease !important;
+  
+  color: #374151 !important;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Hover effect */
+.leaflet-control-zoom a:hover {
+  background: #fff7ed !important;
+  color: #ea580c !important;
+  border-color: #fdba74 !important; 
+  box-shadow: 0 10px 25px rgba(234, 88, 12, 0.15) !important;
+}
+
+/* Space between + and - */
+.leaflet-control-zoom a:first-child {
+  margin-bottom: 10px !important;
+}
+
+/* Hide scrollbar but keep scroll functionality */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}

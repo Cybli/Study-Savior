@@ -39,13 +39,13 @@ export function LocationSidebar({ location, onClose }) {
   const comfort = location.average_comfort_location || 0;
 
   return (
-    <div className="absolute left-4 top-2.75 bottom-4 w-96 bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col z-1000 border-2 border-black">
+    <div className="absolute left-4 top-2.75 bottom-4 w-96 bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col z-1000">
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-2 right-2 p-1 rounded-full hover:bg-gray-200 z-10"
+        className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-full bg-white/30 backdrop-blur-md shadow-md text-gray-700 font-bold hover:bg-orange-50 hover:text-orange-600 hover:border-orange-300 transition-all z-10"
       >
-        <X size={20} className="text-gray-600" />
+        <X size={20} />
       </button>
 
       {/* Image */}
@@ -114,10 +114,12 @@ export function LocationSidebar({ location, onClose }) {
         {/* Review Button */}
         <div className="p-3">
           <button
-            className="w-full py-2 px-4 border-2 border-blue-500 text-blue-500 font-semibold rounded-full hover:bg-blue-500 hover:text-white transition-all text-sm"
+            className="w-full py-2 px-4 border-2 border-gray-300 text-gray-400 font-semibold rounded-full"
             onClick={() => alert('Review feature coming soon!')}
           >
-            Leave a review!
+            Reviews Not Avalable In Beta
+            {/*Leave a review!*/}
+            {/*className="w-full py-2 px-4 border-2 border-blue-500 text-blue-500 font-semibold rounded-full hover:bg-blue-500 hover:text-white transition-all text-sm"*/}
           </button>
         </div>
       </div>

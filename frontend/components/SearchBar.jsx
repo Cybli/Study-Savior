@@ -34,16 +34,16 @@ export function SearchBar({ locations = [], onResultClick }) {
 
   }, [query, locations]);
 
-  return ( // bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col z-1000 border-2 border-black
-    <div className="absolute top-2.75 right-14 w-80 bg-white shadow-2xl rounded-lg p-3 z-1000 border-2 border-black">
+  return (
+    <div className="absolute top-4 right-14 z-[2000]">
 
       {/* Search Input */}
-      <div className="flex items-center border-2 border-gray-500 rounded-lg px-2 py-1">
+      <div className="flex items-center bg-white rounded-full shadow-lg px-4 py-2 w-80 border border-gray-200 focus-within:ring-2 focus-within:ring-orange-500 transition">
         <Search size={18} className="text-gray-500 mr-2" />
         <input
           type="text"
           placeholder="Search Study Locations"
-          className="w-full outline-none text-sm"
+          className="w-full bg-transparent outline-none text-sm placeholder-gray-400"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
@@ -51,7 +51,7 @@ export function SearchBar({ locations = [], onResultClick }) {
 
       {/* Only show results if user typed something */}
       {query.trim() && filteredLocations.length > 0 && (
-        <div className="mt-3 max-h-48 overflow-y-auto border-t pt-2">
+        <div className="mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-200 max-h-60 overflow-y-auto divide-y divide-gray-100 scrollbar-none">
           {filteredLocations.map(location => (
             <div
               key={location.id_location}
@@ -60,7 +60,7 @@ export function SearchBar({ locations = [], onResultClick }) {
                 setQuery('');
                 setFilteredLocations([]);
               }}
-              className="p-2 hover:bg-gray-100 cursor-pointer rounded text-sm"
+              className="p-3 hover:bg-orange-50 cursor-pointer transition text-sm"
             >
               <div className="flex items-center">
                 <MapPin size={18} className="text-gray-500 mr-2" />
