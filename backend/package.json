@@ -5,5 +5,9 @@
     "express": "^5.2.1",
     "forever": "^4.0.3",
     "mysql2": "^3.18.2"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "supertest": "^7.2.2"
   }
 }
