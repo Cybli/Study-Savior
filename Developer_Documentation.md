@@ -57,37 +57,48 @@ module.exports = pool;
 
 ```
 Study-Savior/
-├── backend/                    # Node.js/Express backend server
-│   ├── node_modules/           # Backend dependencies (gitignored)
-│   ├── dbconnector.js          # Database connection pool (gitignored, must create manually)
-│   ├── server.js               # Main Express server, all API routes defined here
-│   ├── package.json            # Backend dependencies and scripts
-│   ├── package-lock.json       # Locked dependency versions
-│   └── README.md               # Backend-specific notes
+├── .github/                        # GitHub Actions CI/CD workflows
+|
+├── backend/                        # Node.js/Express backend server
+│   ├── node_modules/               # Backend dependencies (gitignored)
+│   ├── dbconnector.js              # Database connection pool (gitignored, must create manually)
+│   ├── server.js                   # Main Express server, all API routes defined here
+│   ├── package.json                # Backend dependencies and scripts
+│   ├── package-lock.json           # Locked dependency versions
+│   └── README.md                   # Backend-specific notes
 │
-├── database/                   # Database files
-│   ├── Schema.sql              # MySQL schema — defines all tables and relationships
-│   └── Study_Savior_ERD.mwb    # MySQL Workbench ERD diagram
+├── database/                       # Database files
+|   ├── AddLocation_Template.sql    # SQL template for manually adding study locations
+│   ├── Schema.sql                  # MySQL schema — defines all tables and relationships
+│   └── Study_Savior_ERD.mwb        # MySQL Workbench ERD diagram
 │
-├── frontend/                   # React frontend application
-│   ├── node_modules/           # Frontend dependencies (gitignored)
-│   ├── App.css                 # Global styles
-│   ├── App.jsx                 # Main React component, map and UI logic
-│   ├── index.html              # HTML entry point
-│   ├── main.jsx                # React entry point
-│   ├── postcss.config.js       # PostCSS configuration for Tailwind
-│   ├── vite.config.js          # Vite bundler configuration
-│   ├── package.json            # Frontend dependencies and scripts
-│   ├── package-lock.json       # Locked dependency versions
-│   └── README.md               # Frontend-specific notes
+├── frontend/                       # React frontend application
+│   ├── components/                 # Reusable React components
+│   │   ├── LocationSidebar.jsx     # Sidebar with location details and tags
+│   │   └── SearchBar.jsx           # Search bar component
+│   ├── dist/                       # Production build output (gitignored)
+│   ├── node_modules/               # Frontend dependencies (gitignored)
+│   ├── public/                     # Static assets served directly
+│   ├── App.css                     # Global styles
+│   ├── App.jsx                     # Main React component, map and UI logic
+│   ├── config.js                   # Config for the URL of the backend
+│   ├── index.html                  # HTML entry point
+│   ├── main.jsx                    # React entry point
+│   ├── postcss.config.js           # PostCSS configuration for Tailwind
+│   ├── vite.config.js              # Vite bundler configuration
+│   ├── package.json                # Frontend dependencies and scripts
+│   ├── package-lock.json           # Locked dependency versions
+│   └── README.md                   # Frontend-specific notes
 │
-├── reports/                    # Project reports and deliverables
-├── .gitignore                  # Gitignored files
-├── README.md                   # Project overview
-├── run.sh                      # Setup and launch script
-├── Living_Document.md          # Living document for project tracking
-├── Developer_Documentation.md  # Documentation for developers
-└── User_Manual.md              # Documentation for users
+├── reports/                        # Project reports and deliverables
+├── .gitignore                      # Gitignored files
+├── Developer_Documentation.md      # Documentation for developers
+├── Living_Document.md              # Living document for project tracking
+├── README.md                       # Project overview
+├── runDeployment.sh                # Builds frontend and starts backend with forever
+├── runDev.sh                       # Local development launch script
+├── stopDeployment.sh               # Stops the forever backend process
+└── User_Manual.md                  # Documentation for users
 ```
 
 ### Key Files
