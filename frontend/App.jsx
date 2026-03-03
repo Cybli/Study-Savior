@@ -48,7 +48,7 @@ function App() {
     const zoomLevel = 15;
 
     // Init map
-    map.current = L.map(mapContainer.current).setView(osuCoords, zoomLevel);
+    map.current = L.map(mapContainer.current,{zoomControl: false}).setView(osuCoords, zoomLevel);
     // Add OSM tile layer (z = zoom, x = horizontal tile coordinate, y = vertical tile coordinate)
     // Values automatically updated by leaflet as the user pans and zooms
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -58,6 +58,9 @@ function App() {
       // Sets the number of tiles/columns kept when panning
       keepBuffer: 100
     }).addTo(map.current);
+    
+    // Moves zoom control to the top right, as top left led to it being below our location sidebar
+    L.control.zoom({position: 'topright'}).addTo(map.current);
   }, []);
 
   // Add location markers to map
