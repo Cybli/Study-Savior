@@ -14,8 +14,9 @@ const pool = require('./dbconnector'); //
 const cors = require('cors');
 app.use(cors());
 app.use(express.json());
-app.use(express.static('../frontend/dist'));
-app.use('/images', express.static('../frontend/public/images'));
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+app.use('/images', express.static(path.join(__dirname, '../frontend/public/images')));
 
 //Bcrypt hashing
 const bcrypt = require('bcrypt');
@@ -122,8 +123,6 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: err.message })
   }
 });
-
-
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
