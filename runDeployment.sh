@@ -11,4 +11,4 @@ npm run build
 # start the server/backend
 cd ../backend
 npm install
-npx forever start server.js
+npx forever start $(pwd)/server.js

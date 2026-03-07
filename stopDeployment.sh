@@ -2,4 +2,4 @@
 
 # stop the server/backend
 cd backend
-npx forever stop server.js
+npx forever stop $(pwd)/server.js
