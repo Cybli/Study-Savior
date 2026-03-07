@@ -2,6 +2,10 @@
   SETUP
 */
 
+//Imports
+import { serialize } from 'cookie'
+import cookieParser from 'cookie-parser'
+
 //Express
 const express = require('express');
 const app = express();

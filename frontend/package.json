@@ -13,6 +13,7 @@
     "test": "test"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.9",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.575.0",
     "nodemon": "^3.1.11",

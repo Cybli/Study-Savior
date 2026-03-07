@@ -1,12 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
+//Leaflet
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { LocationSidebar } from './components/LocationSidebar';
-import { SearchBar } from './components/SearchBar';
-import API_URL from './config';
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIconRetina from "leaflet/dist/images/marker-icon-2x.png"; // Without this, it the icon will not properly display
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+//Components
+import { LocationSidebar } from './components/LocationSidebar';
+import { SearchBar } from './components/SearchBar';
+import { LoginForm } from './components/LoginForm';
+import { RegisterForm } from './components/RegisterForm';
+
+//Non-component functions
+import { useEffect, useRef, useState } from 'react';
+
+//Constants
+import API_URL from './config';
 
 // Fix Leaflet marker icons breaking in Vite builds
 delete L.Icon.Default.prototype._getIconUrl;
@@ -100,9 +109,15 @@ function App() {
 
   return (
     <div className="w-full h-screen flex flex-col">
-      <div className="bg-linear-to-r from-orange-600 to-orange-500 p-4 shadow-lg">
-        <h1 className="text-white text-3xl font-bold">Study Savior</h1>
-        <p className="text-orange-100">OSU Campus Study Locations</p>
+      <div className="bg-linear-to-r from-orange-600 to-orange-500 p-4 shadow-lg flex justify-between">
+        <div>
+          <h1 className="text-white text-3xl font-bold">Study Savior</h1>
+          <p className="text-orange-100">OSU Campus Study Locations</p>
+        </div>
+        <div>
+          <LoginForm/>
+          <RegisterForm/>
+        </div>
       </div>
       <div className="relative flex-1">
         <div
