@@ -57,37 +57,48 @@ module.exports = pool;
 
 ```
 Study-Savior/
-├── backend/                    # Node.js/Express backend server
-│   ├── node_modules/           # Backend dependencies (gitignored)
-│   ├── dbconnector.js          # Database connection pool (gitignored, must create manually)
-│   ├── server.js               # Main Express server, all API routes defined here
-│   ├── package.json            # Backend dependencies and scripts
-│   ├── package-lock.json       # Locked dependency versions
-│   └── README.md               # Backend-specific notes
+├── .github/                        # GitHub Actions CI/CD workflows
+|
+├── backend/                        # Node.js/Express backend server
+│   ├── node_modules/               # Backend dependencies (gitignored)
+│   ├── dbconnector.js              # Database connection pool (gitignored, must create manually)
+│   ├── server.js                   # Main Express server, all API routes defined here
+│   ├── package.json                # Backend dependencies and scripts
+│   ├── package-lock.json           # Locked dependency versions
+│   └── README.md                   # Backend-specific notes
 │
-├── database/                   # Database files
-│   ├── Schema.sql              # MySQL schema — defines all tables and relationships
-│   └── Study_Savior_ERD.mwb    # MySQL Workbench ERD diagram
+├── database/                       # Database files
+|   ├── AddLocation_Template.sql    # SQL template for manually adding study locations
+│   ├── Schema.sql                  # MySQL schema — defines all tables and relationships
+│   └── Study_Savior_ERD.mwb        # MySQL Workbench ERD diagram
 │
-├── frontend/                   # React frontend application
-│   ├── node_modules/           # Frontend dependencies (gitignored)
-│   ├── App.css                 # Global styles
-│   ├── App.jsx                 # Main React component, map and UI logic
-│   ├── index.html              # HTML entry point
-│   ├── main.jsx                # React entry point
-│   ├── postcss.config.js       # PostCSS configuration for Tailwind
-│   ├── vite.config.js          # Vite bundler configuration
-│   ├── package.json            # Frontend dependencies and scripts
-│   ├── package-lock.json       # Locked dependency versions
-│   └── README.md               # Frontend-specific notes
+├── frontend/                       # React frontend application
+│   ├── components/                 # Reusable React components
+│   │   ├── LocationSidebar.jsx     # Sidebar with location details and tags
+│   │   └── SearchBar.jsx           # Search bar component
+│   ├── dist/                       # Production build output (gitignored)
+│   ├── node_modules/               # Frontend dependencies (gitignored)
+│   ├── public/                     # Static assets served directly
+│   ├── App.css                     # Global styles
+│   ├── App.jsx                     # Main React component, map and UI logic
+│   ├── config.js                   # Config for the URL of the backend
+│   ├── index.html                  # HTML entry point
+│   ├── main.jsx                    # React entry point
+│   ├── postcss.config.js           # PostCSS configuration for Tailwind
+│   ├── vite.config.js              # Vite bundler configuration
+│   ├── package.json                # Frontend dependencies and scripts
+│   ├── package-lock.json           # Locked dependency versions
+│   └── README.md                   # Frontend-specific notes
 │
-├── reports/                    # Project reports and deliverables
-├── .gitignore                  # Gitignored files
-├── README.md                   # Project overview
-├── run.sh                      # Setup and launch script
-├── Living_Document.md          # Living document for project tracking
-├── Developer_Documentation.md  # Documentation for developers
-└── User_Manual.md              # Documentation for users
+├── reports/                        # Project reports and deliverables
+├── .gitignore                      # Gitignored files
+├── Developer_Documentation.md      # Documentation for developers
+├── Living_Document.md              # Living document for project tracking
+├── README.md                       # Project overview
+├── runDeployment.sh                # Builds frontend and starts backend with forever
+├── runDev.sh                       # Local development launch script
+├── stopDeployment.sh               # Stops the forever backend process
+└── User_Manual.md                  # Documentation for users
 ```
 
 ### Key Files
@@ -112,13 +123,13 @@ Study-Savior/
 | Git | Any recent version | https://git-scm.com |
 | MySQL | v8.0 or higher | https://dev.mysql.com/downloads/ |
 
-### Using run.sh (Recommended)
+### Using runDev.sh (Recommended)
 
 The easiest way to install dependencies and start the app is with the provided script:
 
 ```bash
-chmod +x run.sh
-./run.sh
+chmod +x runDev.sh
+./runDev.sh
 ```
 
 This will install all frontend and backend dependencies and start both servers.
@@ -198,25 +209,24 @@ git pull origin main
 
 3. **Create `dbconnector.js`** on the server if it doesn't exist yet (see [Obtaining the Source Code](#obtaining-the-source-code))
 
-4. **Install dependencies:**
+4. **Update config.js** to contain the URL of your backend
 ```bash
-./run.sh
-```
-Or manually:
-```bash
-cd backend && npm install
-cd ../frontend && npm install && npm run build
+const API_URL = 'http://flip<ENTER FLIP NUMBER>.engr.oregonstate.edu:4000';
+// Local dev
+// const API_URL = 'http://localhost:4000';
+export default API_URL;
 ```
 
-5. **Start the backend with forever:**
+6. **Install dependencies and deploy app:**
 ```bash
-cd backend
-npx forever start server.js
+chmod +x runDeployment.sh
+./runDeployment.sh
 ```
 
-6. **Verify the server is running:**
+6. **If you would like to stop the deployment:**
 ```bash
-npx forever list
+chmod +x stopDeployment.sh
+./stopDeployment.sh
 ```
 
 ### Manual Release Checklist
@@ -226,7 +236,7 @@ Before deploying a new release, verify the following:
 - [ ] All changes are committed and pushed to `main`
 - [ ] `database/Schema.sql` is up to date with any schema changes
 - [ ] Backend port in `server.js` matches the team's assigned flip port
-- [ ] Frontend fetch URLs point to the correct flip server and port (not `localhost`)
+- [ ] Frontend fetch URLs in config.js point to the correct flip server and port (not `localhost`)
 - [ ] No credentials or `.env` secrets are committed to the repository
 - [ ] Test all API routes with curl after deploying (see [Testing the Software](#testing-the-software))
 

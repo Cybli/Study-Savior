@@ -4,10 +4,12 @@
 
 Study Savior is a campus-focused web app that helps OSU students find, rate, and review study locations across campus. Browse an interactive map, read reviews from fellow students, and share your favorite hidden study spots.
 
+Link to active website: http://flip4.engr.oregonstate.edu:4000/
+
 ---
 
 ## Preview
-<img width="1438" height="778" alt="Screenshot_2026-02-27_at_7 00 52_PM" src="https://github.com/user-attachments/assets/cb7bda8e-fd38-4b01-b08a-7133e285b866" />
+<img width="1917" height="916" alt="StudySavior - Preview" src="https://github.com/user-attachments/assets/ac3bd403-5f63-403f-8f3f-ee4d701434d0" />
 
 
 > *Interactive campus map with location details panel — OSU Corvallis*
@@ -34,6 +36,16 @@ Study Savior is a campus-focused web app that helps OSU students find, rate, and
 
 ---
 
+## Supported Operating Systems
+
+| OS | Supported |
+|-------|------------|
+| Windows | Yes |
+| Mac OS | Yes |
+| Linux | Unsure |
+
+---
+
 ## Quick Start
 
 ```bash
@@ -41,7 +53,7 @@ git clone https://github.com/Cybli/Study-Savior.git
 cd Study-Savior
 cp backend/dbconnector.example.js backend/dbconnector.js
 # Fill in your database credentials in backend/dbconnector.js
-./run.sh
+./runDev.sh
 ```
 
 See the [User Manual](User_Manual.md) for full setup instructions.

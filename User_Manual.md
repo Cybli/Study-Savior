@@ -95,7 +95,7 @@ A setup script is provided to install all dependencies and start the application
 
 ```bash
 chmod +x run.sh
-./run.sh
+./runDev.sh
 ```
 
 This will install all frontend and backend dependencies and start both the frontend and backend servers automatically.
@@ -107,7 +107,7 @@ This will install all frontend and backend dependencies and start both the front
 If you've already completed setup and just want to start the app:
 
 ```bash
-./run.sh
+./runDev.sh
 ```
 
 Or manually:
@@ -126,7 +126,7 @@ The app will be available at:
 - **Frontend:** `http://localhost:5173`
 - **Backend API:** `http://localhost:4000`
 
-> **OSU Flip Server:** If running on the OSU flip servers, replace `localhost` with your assigned flip server URL (e.g., `http://flipX.engr.oregonstate.edu:4000`). Use HTTPS where possible for security.
+> **OSU Flip Server:** If running on the OSU flip servers, replace `localhost` with your assigned flip server URL (e.g., `http://flipX.engr.oregonstate.edu:4000`) in the ```frontend/config.js``` file. Use HTTPS where possible for security.
 
 ---
 
@@ -136,7 +136,7 @@ The app will be available at:
 
 When you open Study Savior you'll see an interactive map of OSU's campus (can be changed to other campus' check frontend README for details). Study locations are marked with pins. The map can be panned and zoomed freely using your mouse or trackpad.
 
-### Finding a Study Spot **- WIP**
+### Finding a Study Spot
 
 Click the **"Find a Spot!"** search bar at the top center of the screen and type the name of a building or location. Matching results will appear in a dropdown click one to fly the map to that location and open its details.
 
@@ -192,9 +192,7 @@ Current known issues are tracked in our GitHub Issues page:
 
 **Current limitations as of this release:**
 
-- Sidebar is not yet implemented
 - Reviews are not yet implemented
-- Location images are not yet implemented
 - Account creation and login is not yet implemented
 
 ---
