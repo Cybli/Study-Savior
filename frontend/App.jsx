@@ -131,16 +131,16 @@ function App() {
 
   return (
     <div className="w-full h-screen flex flex-col">
-      <div className="bg-linear-to-r from-orange-600 to-orange-500 p-4 shadow-lg flex justify-between">
+      <div className="bg-linear-to-r from-orange-600 to-orange-500 p-4 shadow-lg flex justify-between items-center">
         <div>
           <h1 className="text-white text-3xl font-bold">Study Savior</h1>
           <p className="text-orange-100">OSU Campus Study Locations</p>
         </div>
-        <div>
+        <div className="flex items-center gap-3">
           {userName ? (
             <>
-              <p className="text-white">Welcome, {userName}!</p>
-              <Button onClick={handleLogout} className='cursor-pointer'>Logout</Button>
+              <p className="text-white font-medium text-sm">Welcome, {userName}!</p>
+              <Button onClick={handleLogout} className='cursor-pointer bg-white text-orange-500 font-semibold px-5 py-2 rounded-lg hover:bg-orange-50 transition-colors duration-200 text-sm'>Logout</Button>
             </>
           ) : (
             <>

@@ -87,7 +87,7 @@ export function LoginForm({ onSubmit }) {
   return (
     <div>
         {/* Login button in the navbar */}
-        <Button onClick={() => setIsOpen(true)} className='cursor-pointer text-white font-medium px-4 py-1.5 rounded-lg border border-white/40 hover:bg-white/20 transition-colors duration-200 text-sm'>Login</Button>
+        <Button onClick={() => setIsOpen(true)} className='cursor-pointer bg-white text-orange-500 font-semibold px-5 py-2 rounded-lg hover:bg-orange-50 transition-colors duration-200 text-sm'>Login</Button>
 
         {/* Modal dialog - both the login and register forms */}
         <Dialog open={isOpen} onClose={() => {
