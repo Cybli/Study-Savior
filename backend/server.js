@@ -21,7 +21,7 @@ const pool = require('./dbconnector'); //
 //Communication to front end
 const cors = require('cors');
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:5173', 'http://flip4.engr.oregonstate.edu:4000', 'http://flip3.engr.oregonstate.edu:4000', 'http://flip2.engr.oregonstate.edu:4000', 'http://flip1.engr.oregonstate.edu:4000'],
   credentials: true
 }));
 app.use(express.json());
