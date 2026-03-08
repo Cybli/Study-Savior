@@ -9,7 +9,6 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { LocationSidebar } from './components/LocationSidebar';
 import { SearchBar } from './components/SearchBar';
 import { LoginForm } from './components/LoginForm';
-import { RegisterForm } from './components/RegisterForm';
 
 //Non-component functions
 import { useEffect, useRef, useState } from 'react';
@@ -146,7 +145,6 @@ function App() {
           ) : (
             <>
               <LoginForm/>
-              <RegisterForm/>
             </>
           )}
         </div>

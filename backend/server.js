@@ -25,8 +25,9 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
-app.use(express.static('../frontend/dist'));
-app.use('/images', express.static('../frontend/public/images'));
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+app.use('/images', express.static(path.join(__dirname, '../frontend/public/images')));
 app.use(cookieParser())
 
 //Bcrypt hashing
