@@ -3,10 +3,8 @@ import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import API_URL from '../config'
 
 export function RegisterForm ({onSubmit}) {
-  const [userId, setUserId] = useState()
   const [pass, setPass] = useState("")
   const [username, setUsername] = useState("")
-  const [status, setStatus] = useState()
   const [isOpen, setIsOpen] = useState(false)
 
   async function handleSubmit(e) {
@@ -24,8 +22,8 @@ export function RegisterForm ({onSubmit}) {
         body: JSON.stringify({ username: username, password: pass })
       })
 
-      if (response.status !== 401) {
-        const data = await response.json()
+      if (response.ok) {
+        alert("Successfully created account!")
         setIsOpen(false)
       } else {
         alert("Failed to login, incorrect username or password")
@@ -57,7 +55,7 @@ export function RegisterForm ({onSubmit}) {
               onChange={e => setUsername(e.target.value)}
               required
             />
-            
+
             <input
                 placeholder="Password"
                 type="password"

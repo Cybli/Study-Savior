@@ -13,6 +13,7 @@ import { RegisterForm } from './components/RegisterForm';
 
 //Non-component functions
 import { useEffect, useRef, useState } from 'react';
+import { Button } from '@headlessui/react'
 
 //Constants
 import API_URL from './config';
@@ -30,6 +31,7 @@ function App() {
   const map = useRef(null);
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [userName, setUserName] = useState(null)
 
   /*To use:
       To use information stored in a location use location.NAME_OF_COLUMN_IN_DATABASE
@@ -90,6 +92,19 @@ function App() {
     });
   }, [locations]);
 
+  // Validate user's login
+  useEffect(() => {
+    fetch(`${API_URL}/me`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => {
+        if (data.username) setUserName(data.username);
+      })
+      .catch(() => {
+        setUserName(null)
+        console.log("== Auth Failed")
+      });
+  }, []);
+
   const handleSearchResultClick = (location) => {
     setSelectedLocation(location);
 
@@ -107,6 +122,14 @@ function App() {
     }
   };
 
+  async function handleLogout() {
+    await fetch(`${API_URL}/logout`, {
+      method: 'POST',
+      credentials: 'include'
+    });
+    window.location.reload();
+  }
+
   return (
     <div className="w-full h-screen flex flex-col">
       <div className="bg-linear-to-r from-orange-600 to-orange-500 p-4 shadow-lg flex justify-between">
@@ -115,8 +138,17 @@ function App() {
           <p className="text-orange-100">OSU Campus Study Locations</p>
         </div>
         <div>
-          <LoginForm/>
-          <RegisterForm/>
+          {userName ? (
+            <>
+              <p className="text-white">Welcome, {userName}!</p>
+              <Button onClick={handleLogout} className='cursor-pointer'>Logout</Button>
+            </>
+          ) : (
+            <>
+              <LoginForm/>
+              <RegisterForm/>
+            </>
+          )}
         </div>
       </div>
       <div className="relative flex-1">

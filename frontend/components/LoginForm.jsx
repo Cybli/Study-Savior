@@ -3,7 +3,6 @@ import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import API_URL from '../config'
 
 export function LoginForm({ onSubmit }) {
-  const [userId, setUserId] = useState()
   const [pass, setPass] = useState("")
   const [username, setUsername] = useState("")
   const [isOpen, setIsOpen] = useState(false)
@@ -19,18 +18,18 @@ export function LoginForm({ onSubmit }) {
     try {
       const response = await fetch(`${API_URL}/login`, {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: username, password: pass })
       })
 
-      if (response.status !== 401) {
-        const data = await response.json()
-        setUserId(data.id_user)
+      const data = await response.json()
+
+      if (response.ok) {
         setIsOpen(false)
-        onSubmit({ userId: data.id_user, username })
+        window.location.reload();
       } else {
         alert("Failed to login, incorrect username or password")
-        onSubmit({ userId: 0, username: "" })
         setPass("")
         setUsername("")
       }
