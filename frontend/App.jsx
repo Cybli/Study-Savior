@@ -30,7 +30,7 @@ function App() {
   const map = useRef(null);
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [userName, setUserName] = useState(null)
+  const [user, setUser] = useState(null)
 
   /*To use:
       To use information stored in a location use location.NAME_OF_COLUMN_IN_DATABASE
@@ -96,10 +96,12 @@ function App() {
     fetch(`${API_URL}/me`, { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
-        if (data.username) setUserName(data.username);
+        if (data.username && data.id_user) {
+          setUser({ id_user: data.id_user, username: data.username });
+        }
       })
       .catch(() => {
-        setUserName(null)
+        setUser(null)
         console.log("== Auth Failed")
       });
   }, []);
@@ -137,9 +139,9 @@ function App() {
           <p className="text-orange-100">OSU Campus Study Locations</p>
         </div>
         <div className="flex items-center gap-3">
-          {userName ? (
+          {user ? (
             <>
-              <p className="text-white font-medium text-sm">Welcome, {userName}!</p>
+              <p className="text-white font-medium text-sm">Welcome, {user.username}!</p>
               <Button onClick={handleLogout} className='cursor-pointer bg-white text-orange-500 font-semibold px-5 py-2 rounded-lg hover:bg-orange-50 transition-colors duration-200 text-sm'>Logout</Button>
             </>
           ) : (
@@ -157,6 +159,7 @@ function App() {
         {selectedLocation && (
           <LocationSidebar
             location={selectedLocation}
+            user={user}
             onClose={() => setSelectedLocation(null)}
           />
         )}

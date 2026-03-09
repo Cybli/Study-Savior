@@ -182,6 +182,75 @@ app.post('/logout', (req, res) => {
   res.json({ message: 'Logged out successfully' });
 });
 
+//Submit a new rating/review
+/*
+Can return 3 things:
+  - 'Rating submitted successfully'
+  - 'You have already reviewed this location' (if duplicate)
+  - or an error message
+*/
+app.post('/ratings', async (req, res) => {
+  const { id_location, noise_rating, comfort_rating, crowded_rating, written_rating } = req.body;
+  
+  // Validate token and extract authenticated user ID
+  const token = req.cookies.auth;
+  if (!token) return res.status(401).json({ error: 'Not logged in' });
+  
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const id_user = decoded.id_user; // Use user ID from authenticated token only
+    
+    // Validate ratings are between 1-5
+    if (noise_rating < 1 || noise_rating > 5 || 
+        comfort_rating < 1 || comfort_rating > 5 || 
+        crowded_rating < 1 || crowded_rating > 5) {
+      return res.status(400).json({ error: 'Ratings must be between 1 and 5' });
+    }
+    
+    // Insert the rating into the database
+    await pool.query(
+      'INSERT INTO rating (id_location, id_user, noise_rating, comfort_rating, crowded_rating, written_rating) VALUES (?, ?, ?, ?, ?, ?)',
+      [id_location, id_user, noise_rating, comfort_rating, crowded_rating, written_rating || null]
+    );
+    
+    // Recalculate location averages
+    const [avgResults] = await pool.query(
+      `SELECT 
+        AVG(noise_rating) as avg_noise,
+        AVG(comfort_rating) as avg_comfort,
+        AVG(crowded_rating) as avg_crowded,
+        AVG((noise_rating + comfort_rating + crowded_rating) / 3) as avg_overall
+      FROM rating WHERE id_location = ?`,
+      [id_location]
+    );
+    
+    // Update location averages
+    await pool.query(
+      `UPDATE location SET 
+        average_noise_location = ?,
+        average_comfort_location = ?,
+        average_crowded_location = ?,
+        average_overall_location = ?
+      WHERE id_location = ?`,
+      [
+        avgResults[0].avg_noise,
+        avgResults[0].avg_comfort,
+        avgResults[0].avg_crowded,
+        avgResults[0].avg_overall,
+        id_location
+      ]
+    );
+    
+    res.json({ message: 'Rating submitted successfully' });
+  } catch (err) {
+    // Check for duplicate rating (UNIQUE constraint violation)
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(400).json({ error: 'You have already reviewed this location' });
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
