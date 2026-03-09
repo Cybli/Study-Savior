@@ -2,6 +2,14 @@
   SETUP
 */
 
+//Cookies
+const cookie = require('cookie');
+const cookieParser = require('cookie-parser');
+
+//JSON Web Token (for session id generation)
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = 'your-secret-key';
+
 //Express
 const express = require('express');
 const app = express();
@@ -12,15 +20,39 @@ const pool = require('./dbconnector'); //
 
 //Communication to front end
 const cors = require('cors');
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://flip4.engr.oregonstate.edu:4000', 'http://flip3.engr.oregonstate.edu:4000', 'http://flip2.engr.oregonstate.edu:4000', 'http://flip1.engr.oregonstate.edu:4000'],
+  credentials: true
+}));
 app.use(express.json());
 const path = require('path');
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 app.use('/images', express.static(path.join(__dirname, '../frontend/public/images')));
+app.use(cookieParser())
 
 //Bcrypt hashing
 const bcrypt = require('bcrypt');
 const SALT_ROUNDS = 10;
+
+/* 
+  FUNCTIONS
+*/
+function generateAuthToken(user) {
+  return jwt.sign(
+    { id_user: user.id_user, username: user.username_user },
+    JWT_SECRET,
+    { expiresIn: '8h' }
+  );
+}
+
+function setAuthCookie(res, token) {
+  res.cookie("auth", token, {
+    path: "/",
+    httpOnly: true,
+    expires: new Date(Date.now() + 8 * 60 * 60 * 1000),
+  })
+}
+
 
 /*
   ROUTES
@@ -99,7 +131,7 @@ app.post('/register', async (req, res) => {
 /*
 Can return 3 things:
   - 'Invalid username or password'
-  - 'Logic successful'
+  - 'Login successful'
   - or an error message
 */
 app.post('/login', async (req, res) => {
@@ -117,12 +149,39 @@ app.post('/login', async (req, res) => {
     const match = await bcrypt.compare(password, user.hashedpass_user);
     if (!match) return res.status(401).json({ error: 'Invalid username or password' });
 
-    //If user is found return their id and username
+    //If user is found, set cookies and return their id and username
+    setAuthCookie(res, generateAuthToken(user))
     res.json({ message: 'Login successful', id_user: user.id_user, username: user.username_user });
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
 });
+
+//Verify that a user is logged in and has a valid token
+/* 
+  Can return 3 things:
+    - 'Not logged in'
+    - 'Verification succesful'
+    - 'Invalid or expired token'
+*/
+app.get('/me', (req, res) => {
+  const token = req.cookies.auth;
+  if (!token) return res.status(401).json({ error: 'Not logged in' });
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    res.json({ message: 'Verification successful', id_user: decoded.id_user, username: decoded.username });
+  } catch (err) {
+    res.status(401).json({ error: 'Invalid or expired token' });
+  }
+});
+
+//Logout the user when requested
+app.post('/logout', (req, res) => {
+  res.clearCookie('auth', { path: '/' });
+  res.json({ message: 'Logged out successfully' });
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

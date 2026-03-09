@@ -1,12 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
+//Leaflet
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { LocationSidebar } from './components/LocationSidebar';
-import { SearchBar } from './components/SearchBar';
-import API_URL from './config';
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIconRetina from "leaflet/dist/images/marker-icon-2x.png"; // Without this, it the icon will not properly display
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+//Components
+import { LocationSidebar } from './components/LocationSidebar';
+import { SearchBar } from './components/SearchBar';
+import { LoginForm } from './components/LoginForm';
+
+//Non-component functions
+import { useEffect, useRef, useState } from 'react';
+import { Button } from '@headlessui/react'
+
+//Constants
+import API_URL from './config';
 
 // Fix Leaflet marker icons breaking in Vite builds
 delete L.Icon.Default.prototype._getIconUrl;
@@ -21,6 +30,7 @@ function App() {
   const map = useRef(null);
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [userName, setUserName] = useState(null)
 
   /*To use:
       To use information stored in a location use location.NAME_OF_COLUMN_IN_DATABASE
@@ -81,6 +91,19 @@ function App() {
     });
   }, [locations]);
 
+  // Validate user's login
+  useEffect(() => {
+    fetch(`${API_URL}/me`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => {
+        if (data.username) setUserName(data.username);
+      })
+      .catch(() => {
+        setUserName(null)
+        console.log("== Auth Failed")
+      });
+  }, []);
+
   const handleSearchResultClick = (location) => {
     setSelectedLocation(location);
 
@@ -98,11 +121,33 @@ function App() {
     }
   };
 
+  async function handleLogout() {
+    await fetch(`${API_URL}/logout`, {
+      method: 'POST',
+      credentials: 'include'
+    });
+    window.location.reload();
+  }
+
   return (
     <div className="w-full h-screen flex flex-col">
-      <div className="bg-linear-to-r from-orange-600 to-orange-500 p-4 shadow-lg">
-        <h1 className="text-white text-3xl font-bold">Study Savior</h1>
-        <p className="text-orange-100">OSU Campus Study Locations</p>
+      <div className="bg-linear-to-r from-orange-600 to-orange-500 p-4 shadow-lg flex justify-between items-center">
+        <div>
+          <h1 className="text-white text-3xl font-bold">Study Savior</h1>
+          <p className="text-orange-100">OSU Campus Study Locations</p>
+        </div>
+        <div className="flex items-center gap-3">
+          {userName ? (
+            <>
+              <p className="text-white font-medium text-sm">Welcome, {userName}!</p>
+              <Button onClick={handleLogout} className='cursor-pointer bg-white text-orange-500 font-semibold px-5 py-2 rounded-lg hover:bg-orange-50 transition-colors duration-200 text-sm'>Logout</Button>
+            </>
+          ) : (
+            <>
+              <LoginForm/>
+            </>
+          )}
+        </div>
       </div>
       <div className="relative flex-1">
         <div

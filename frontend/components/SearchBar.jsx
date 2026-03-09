@@ -35,7 +35,7 @@ export function SearchBar({ locations = [], onResultClick }) {
   }, [query, locations]);
 
   return (
-    <div className="absolute top-4 right-14 z-[2000]">
+    <div className="absolute top-4 right-14 z-[500]">
 
       {/* Search Input */}
       <div className="flex items-center bg-white rounded-full shadow-lg px-4 py-2 w-80 border border-gray-200 focus-within:ring-2 focus-within:ring-orange-500 transition">
