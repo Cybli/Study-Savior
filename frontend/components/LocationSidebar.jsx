@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { Tag } from 'lucide-react';
 import API_URL from '../config';
+import { Review } from './Review';
 
-export function LocationSidebar({ location, onClose }) {
+export function LocationSidebar({ location, user, onClose }) {
   const [tags, setTags] = useState([]);
+  const [showReview, setShowReview] = useState(false);
 
   useEffect(() => {
     setTags([]); // Clear old tags when location changes
@@ -113,16 +115,30 @@ export function LocationSidebar({ location, onClose }) {
 
         {/* Review Button */}
         <div className="p-3">
-          <button
-            className="w-full py-2 px-4 border-2 border-gray-300 text-gray-400 font-semibold rounded-full"
-            onClick={() => alert('Review feature coming soon!')}
-          >
-            Reviews Not Avalable In Beta
-            {/*Leave a review!*/}
-            {/*className="w-full py-2 px-4 border-2 border-blue-500 text-blue-500 font-semibold rounded-full hover:bg-blue-500 hover:text-white transition-all text-sm"*/}
-          </button>
+          {user ? (
+            <button
+              className="w-full py-2 px-4 bg-orange-600 text-white font-semibold rounded-full hover:bg-orange-700 transition-all"
+              onClick={() => setShowReview(true)}
+            >
+              Leave a Review!
+            </button>
+          ) : (
+            <button
+              className="w-full py-2 px-4 border-2 border-gray-300 text-gray-400 font-semibold rounded-full cursor-not-allowed"
+              disabled
+            >
+              You must be logged in to leave a review
+            </button>
+          )}
         </div>
       </div>
+      {showReview && user && (
+        <Review
+          location={location}
+          userId={user.id_user}
+          onClose={() => setShowReview(false)}
+        />
+      )}
     </div>
   );
 }
