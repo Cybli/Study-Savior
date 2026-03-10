@@ -134,7 +134,7 @@ export function Review({ location, onClose, userId }) {
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-white/10 flex items-center justify-center z-[2001]">
-      <div className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[95vh] overflow-y-auto scrollbar-none">
         {/* Header */}
         <div className="bg-linear-to-r from-orange-600 to-orange-500 text-white p-6 sticky top-0 z-10">
           <h2 className="text-2xl font-bold">Leave a Review</h2>
@@ -152,9 +152,9 @@ export function Review({ location, onClose, userId }) {
           )}
 
           {/* Rating Categories */}
-          <div className="space-y-6 mb-8">
+          <div className="space-y-3 mb-4">
             {ratingCategories.map(category => (
-              <div key={category.key} className="border-b border-gray-200 pb-6 last:border-b-0">
+              <div key={category.key} className="border-b border-gray-200 pb-3 last:border-b-0">
                 <div className="mb-3">
                   <h3 className="text-lg font-semibold text-gray-900">{category.label}</h3>
                   <p className="text-sm text-gray-500">{category.description}</p>
@@ -178,7 +178,7 @@ export function Review({ location, onClose, userId }) {
               onChange={(e) => setWritten_rating(e.target.value)}
               placeholder="Share your experience at this location... (optional)"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
-              rows="5"
+              rows="3"
             />
             <p className="text-xs text-gray-500 mt-1">
               {written_rating.length} characters
