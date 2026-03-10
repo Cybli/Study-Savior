@@ -6,9 +6,11 @@ import { Review } from './Review';
 
 export function LocationSidebar({ location, user, onClose }) {
   const [tags, setTags] = useState([]);
+  const [ratings, setRatings] = useState([]);
   const [showReview, setShowReview] = useState(false);
 
   useEffect(() => {
+    setRatings([]);
     setTags([]); // Clear old tags when location changes
     if (location) {
       fetch(`${API_URL}/locations/${location.id_location}/tags`)
@@ -16,6 +18,13 @@ export function LocationSidebar({ location, user, onClose }) {
         .then(data => {
           if (!Array.isArray(data)) return;
           setTags(data);
+        })
+        .catch(err => console.error('Failed to fetch tags:', err));
+      fetch(`${API_URL}/locations/${location.id_location}/ratings`)
+        .then(res => res.json())
+        .then(revdata => {
+          if (!Array.isArray(revdata)) return;
+          setRatings(revdata);
         })
         .catch(err => console.error('Failed to fetch tags:', err));
     }
@@ -72,7 +81,7 @@ export function LocationSidebar({ location, user, onClose }) {
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto scrollbar-none">
         {/* Ratings Section */}
         <div className="bg-gray-50 border-b border-gray-200 p-3">
           <div className="flex justify-between items-center text-sm mb-2">
@@ -107,7 +116,7 @@ export function LocationSidebar({ location, user, onClose }) {
             )}
           </div>
         </div>
-
+        
         {/* Description */}
         <div className="p-3 border-b border-gray-200 text-sm text-black">
           {location.description_location || 'No description available'}
@@ -130,6 +139,29 @@ export function LocationSidebar({ location, user, onClose }) {
               You must be logged in to leave a review
             </button>
           )}
+        </div>
+        {/* ratings Section */}
+        <div className="bg-gray-50 border-b border-gray-200 p-3">
+          <h3 className="text-xs font-bold text-black uppercase tracking-wider mb-2">
+            Ratings
+          </h3>
+          <div className="flex flex-col gap-2 max-h-[500px] overflow-y-auto">
+            {ratings && ratings.length > 0 ? (
+              ratings.slice(0, 4).map(review => (
+                <div
+                  key={review.id_rating}
+                  className="p-2 bg-white border border-gray-300 rounded-md text-sm text-black max-h-[200px] overflow-hidden"
+                >
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-l font-bold">{review.username_user || 'Anonymous'}</span>
+                  </div>
+                  <p className="wrap">{review.written_rating || ''}</p>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 text-sm">No ratings yet</p>
+            )}
+          </div>
         </div>
       </div>
       {showReview && user && (
