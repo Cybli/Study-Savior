@@ -200,6 +200,7 @@ Current known issues are tracked in our GitHub Issues page:
 **Current limitations as of this release:**
 
 - No persistent location selection between uses
+- No mobile support
 
 ---
 
