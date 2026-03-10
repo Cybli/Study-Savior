@@ -73,8 +73,13 @@ Study-Savior/
 │   └── Study_Savior_ERD.mwb        # MySQL Workbench ERD diagram
 │
 ├── frontend/                       # React frontend application
+|   ├── assets/                     # Assets for the frontend UI
+│   |   ├── marker-icon-2x-red.png  # Red marker icon for retina displays
+│   │   └── marker-icon-red.png     # Red marker icon
 │   ├── components/                 # Reusable React components
 │   │   ├── LocationSidebar.jsx     # Sidebar with location details and tags
+│   │   ├── LoginForm.jsx           # Login page with integrated registration section
+│   │   ├── Review.jsx              # Review page
 │   │   └── SearchBar.jsx           # Search bar component
 │   ├── dist/                       # Production build output (gitignored)
 │   ├── node_modules/               # Frontend dependencies (gitignored)
@@ -107,7 +112,7 @@ Study-Savior/
 - **`frontend/App.jsx`** - Main React component handling the map, side panel, and authentication UI.
 - **`database/Schema.sql`** - Source of truth for the database structure. Update this when making schema changes.
 - **`database/Study_Savior_ERD.mwb`** - Visual ERD, open with MySQL Workbench.
-- **`run.sh`** - Installs all dependencies and starts both frontend and backend servers.
+- **`runDev.sh`** - Installs all dependencies and starts both frontend and backend servers.
 - **`StudySavior_LivingDocument.md`** - Running project notes and team decisions.
 
 ---
