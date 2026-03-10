@@ -31,6 +31,7 @@ function App() {
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [user, setUser] = useState(null)
+  
 
   /*To use:
       To use information stored in a location use location.NAME_OF_COLUMN_IN_DATABASE
@@ -133,16 +134,29 @@ function App() {
 
   return (
     <div className="w-full h-screen flex flex-col">
+      {/* Banner */}
       <div className="bg-linear-to-r from-orange-600 to-orange-500 p-4 shadow-lg flex justify-between items-center">
         <div>
           <h1 className="text-white text-3xl font-bold">Study Savior</h1>
           <p className="text-orange-100">OSU Campus Study Locations</p>
         </div>
+        {/* User account corner */}
         <div className="flex items-center gap-3">
           {user ? (
             <>
-              <p className="text-white font-medium text-sm">Welcome, {user.username}!</p>
-              <Button onClick={handleLogout} className='cursor-pointer bg-white text-orange-500 font-semibold px-5 py-2 rounded-lg hover:bg-orange-50 transition-colors duration-200 text-sm'>Logout</Button>
+              <div className="flex items-center gap-2 bg-orange-900/70 rounded-lg px-3 py-2">
+                {/* User Icon svg */}
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                </svg>
+                <p className="text-white font-medium text-sm">{user.username}</p>
+              </div>
+              <Button
+                onClick={handleLogout}
+                className='cursor-pointer bg-white text-orange-500 font-semibold px-5 py-2 rounded-lg hover:bg-orange-50 transition-colors duration-200 text-sm'
+              >
+                Logout
+              </Button>
             </>
           ) : (
             <>
