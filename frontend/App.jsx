@@ -2,7 +2,9 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import markerIcon from "leaflet/dist/images/marker-icon.png";
+import redMarkerIcon from "./assets/marker-icon-red.png";
 import markerIconRetina from "leaflet/dist/images/marker-icon-2x.png"; // Without this, it the icon will not properly display
+import redMarkerIconRetina from "./assets/marker-icon-2x-red.png";
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 //Components
@@ -25,13 +27,30 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
+const defaultIcon = L.icon({
+  iconUrl: markerIcon,
+  iconRetinaUrl: markerIconRetina,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
+
+const selectedIcon = L.icon({
+  iconUrl: redMarkerIcon,
+  iconRetinaUrl: redMarkerIconRetina,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+
+});
+
 function App() {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [user, setUser] = useState(null)
-  
+  const selectedMarker = useRef(null);
 
   /*To use:
       To use information stored in a location use location.NAME_OF_COLUMN_IN_DATABASE
@@ -86,6 +105,13 @@ function App() {
 
         // Add click event to show location in sidebar
         marker.on('click', () => {
+          // Reset previous selected marker to default
+          if (selectedMarker.current) {
+            selectedMarker.current.setIcon(defaultIcon);
+          }
+          // Set new marker to red
+          marker.setIcon(selectedIcon);
+          selectedMarker.current = marker;
           setSelectedLocation(location);
         });
       });
@@ -174,7 +200,13 @@ function App() {
           <LocationSidebar
             location={selectedLocation}
             user={user}
-            onClose={() => setSelectedLocation(null)}
+            onClose={() => {
+              if (selectedMarker.current) {
+                selectedMarker.current.setIcon(defaultIcon);
+                selectedMarker.current = null;
+              }
+              setSelectedLocation(null);
+            }}
           />
         )}
         <SearchBar
