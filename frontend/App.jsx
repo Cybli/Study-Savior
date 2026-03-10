@@ -136,6 +136,22 @@ function App() {
   const handleSearchResultClick = (location) => {
     setSelectedLocation(location);
 
+    // Reset previous selected marker
+    if (selectedMarker.current) {
+      selectedMarker.current.setIcon(defaultIcon);
+    }
+
+    // Find and highlight the matching marker
+    map.current.eachLayer(layer => {
+      if (layer instanceof L.Marker) {
+        const pos = layer.getLatLng();
+        if (pos.lat === location.lat && pos.lng === location.lng) {
+          layer.setIcon(selectedIcon);
+          selectedMarker.current = layer;
+        }
+      }
+    });
+
     if (map.current && location.lat && location.lng) {
       map.current.flyTo([location.lat, location.lng], 19,
         {
