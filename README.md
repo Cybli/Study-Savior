@@ -9,8 +9,7 @@ Link to active website: http://flip4.engr.oregonstate.edu:4000/
 ---
 
 ## Preview
-<img width="1917" height="916" alt="StudySavior - Preview" src="https://github.com/user-attachments/assets/ac3bd403-5f63-403f-8f3f-ee4d701434d0" />
-
+<img width="1918" height="997" alt="Screenshot 2026-03-10 160051" src="https://github.com/user-attachments/assets/37af00ea-3b0e-4b44-bbef-47d24d7024c5" />
 
 > *Interactive campus map with location details panel — OSU Corvallis*
 
