@@ -42,7 +42,9 @@ Link to active website: http://flip4.engr.oregonstate.edu:4000/
 |-------|------------|
 | Windows | Yes |
 | Mac OS | Yes |
-| Linux | Unsure |
+| Linux | Yes |
+| iOS | No |
+| Android | No |
 
 ---
 
