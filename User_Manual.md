@@ -149,17 +149,24 @@ Click any pin on the map to open the **side panel** on the left. This panel show
 - Tags describing the spot (e.g., "Collaborative", "Natural Light")
 - A written description of the location
 
-### Creating an Account **- WIP**
+### Creating an Account
 
-Click **"Sign In or Create Account"** in the top right corner, then select **"Don't have an account? Register"**. Enter a username and password to create your account. **Passwords are securely hashed and salted they are never stored in plaintext.**
+Click **"Login"** in the top right corner, then select **"Don't have an account? Register here"**. Enter a username and password to create your account. **Passwords are securely hashed and salted; they are never stored in plaintext.**
 
-### Logging In **- WIP**
+<img width="410" height="343" alt="image" src="https://github.com/user-attachments/assets/590218df-c1e4-4570-a772-cb4fa4fc6b58" />
 
-Click **"Sign In or Create Account"** in the top right corner, enter your username and password, and click **Sign In**. Once logged in your username will appear in the top right.
 
-### Leaving a Review **- WIP**
+### Logging In
+
+Click **"Login"** in the top right corner, then enter your username and password, and click **Login**. Once logged in, your username will appear in the top right.
+
+<img width="407" height="342" alt="image" src="https://github.com/user-attachments/assets/32f2d186-378a-4676-9fba-dbb20575c955" />
+
+
+### Leaving a Review
 
 Click a location pin to open the side panel, then click **"Leave a review!"** at the bottom.
+> Note: You must be logged in to leave a review
 
 ## Reporting a Bug
 
@@ -192,8 +199,7 @@ Current known issues are tracked in our GitHub Issues page:
 
 **Current limitations as of this release:**
 
-- Reviews are not yet implemented
-- Account creation and login is not yet implemented
+- No persistent location selection between uses
 
 ---
 
