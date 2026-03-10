@@ -93,6 +93,18 @@ app.get('/locations/:id/tags', async (req, res) => { // /locations/ENTERID/tags
   }
 });
 
+app.get('/locations/:id/ratings', async (req, res) => { // /locations/ENTERID/tags
+  try {
+    const [tags] = await pool.query(
+      'SELECT r.id_rating, r.written_rating, u.username_user FROM `rating` r INNER JOIN location l ON r.id_location = l.id_location INNER JOIN user u ON u.id_user = r.id_user WHERE r.id_location = ? AND r.written_rating IS NOT NULL',
+      [req.params.id]
+    );
+    res.json(tags); // Return the result of the query in json format
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 //Register new user
 /*
 Can return 3 things:
