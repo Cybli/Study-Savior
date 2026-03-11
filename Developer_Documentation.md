@@ -60,12 +60,14 @@ Study-Savior/
 ├── .github/                        # GitHub Actions CI/CD workflows
 |
 ├── backend/                        # Node.js/Express backend server
+│   ├── __mocks__/                  # Contains Jest mock files for CI testing
 │   ├── node_modules/               # Backend dependencies (gitignored)
 │   ├── dbconnector.js              # Database connection pool (gitignored, must create manually)
-│   ├── server.js                   # Main Express server, all API routes defined here
 │   ├── package.json                # Backend dependencies and scripts
 │   ├── package-lock.json           # Locked dependency versions
-│   └── README.md                   # Backend-specific notes
+│   |── README.md                   # Backend-specific notes
+│   ├── server.js                   # Main Express server, all API routes defined here
+│   └── server.test.js              # Contains Jest tests for the backend routes
 │
 ├── database/                       # Database files
 |   ├── AddLocation_Template.sql    # SQL template for manually adding study locations
@@ -109,6 +111,7 @@ Study-Savior/
 ### Key Files
 
 - **`backend/server.js`** - All API routes live here (`/locations`, `/register`, `/login`). Add new routes here.
+- **`backend/server.test.js`** - All backend tests for API routes live here. Add new tests here
 - **`frontend/App.jsx`** - Main React component handling the map, side panel, and authentication UI.
 - **`database/Schema.sql`** - Source of truth for the database structure. Update this when making schema changes.
 - **`database/Study_Savior_ERD.mwb`** - Visual ERD, open with MySQL Workbench.
@@ -188,13 +191,99 @@ Once imported, the following tables will exist:
 
 ## Testing the Software
 
-There is currently no automated test suite. Testing is done manually. A formal testing framework is planned for a future milestone.
+We use **[Jest](https://jestjs.io/)** as our test automation framework along with [Supertest](https://www.npmjs.com/package/supertest)  HTTP route testing on our backend.
+
+- **Jest** - JavaScript testing framework that handles unit and integration tests
+- **Supertest** Allows HTTP requests to be made to our Express app without spinning up a live server
+
+Tests are located in `backend/server.test.js` and cover all API routes defined in `server.js`.
+
+**Why Jest and Supertest?**
+
+ **Familiarity** — Jest is the most widely used JavaScript testing framework and integrates naturally with Node.js projects
+- **Zero config** — Works out of the box with no complex setup required
+- **Built-in coverage** — Jest includes code coverage reporting without needing additional tools
+- **Async support** — Handles async/await testing natively, which is essential for testing database queries and API routes
+- **Supertest integration** — Supertest works seamlessly with Express and Jest, allowing testing without a live server
 
 ---
 
 ## Adding New Tests
 
-Automated testing is planned but not yet implemented. When tests are added, the project will use **Jest** for backend unit testing.
+
+1. Open `backend/server.test.js`
+2. Add a new `describe` block for the route you want to test, following the existing pattern:
+
+```javascript
+describe('GET /your-new-route', () => {
+    it('returns expected data (200)', async () => {
+        // Set up what the mock DB should return
+        pool.query.mockResolvedValueOnce([fakeData]);
+
+        // Make the request
+        const res = await request(app).get('/your-new-route');
+
+        // Assert the result
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toHaveProperty('someField');
+    });
+
+    it('returns 500 on DB error', async () => {
+        pool.query.mockRejectedValueOnce(new Error('DB error'));
+        const res = await request(app).get('/your-new-route');
+        expect(res.statusCode).toBe(500);
+    });
+});
+```
+
+3. Run `npm run test` from the `backend/` directory to verify the new test passes
+4. Commit and push — the CI pipeline will automatically run all tests including your new one
+
+---
+
+#### **CI Service: GitHub Actions**
+
+We use **GitHub Actions** as our CI service. The repository is hosted on GitHub at https://github.com/Cybli/Study-Savior, and GitHub Actions is configured directly within the repository via `.github/workflows/ci.yml`. No external service account or linking is required — Actions is built into GitHub and triggers automatically on repository events.
+
+The workflow installs Node.js 18, installs backend dependencies via `npm install`, and runs the test suite via `npm run test`. Because the real database connector is gitignored (it contains OSU MySQL credentials), a safe stub is provided via `backend/__mocks__/dbconnector.js`, and the `moduleNameMapper` field in `package.json` ensures Jest always resolves `./dbconnector` to the mock during CI.
+
+**Why GitHub Actions?**
+
+- **Built into GitHub** — No external account or service linking required. Since the project is already on GitHub, Actions is available immediately with no setup overhead
+- **Free for public repositories** — No cost for our use case
+- **Simple YAML configuration** — Workflow files are straightforward, version-controlled alongside the code, and well documented
+- **Large marketplace** — Thousands of pre-built actions available for common tasks (e.g., `actions/checkout`, `actions/setup-node`)
+- **Native secret management** — Supports encrypted repository secrets for any future environment variables needed in CI
+
+**CI Pros/Cons Matrix**
+
+| Feature | GitHub Actions | Travis CI | CircleCI |
+|---------|---------------|-----------|----------|
+| GitHub integration | Native — built-in, zero setup | Good — requires OAuth link | Good — requires OAuth link |
+| Free tier | Free for public repos, 2,000 min/month for private | Limited — no longer free for open source as of 2023 | Limited — 6,000 credits/month free tier |
+| Setup complexity | Low — YAML file in repo | Low — YAML file in repo | Medium — additional dashboard config |
+| Configuration format | YAML | YAML | YAML |
+| Marketplace/plugins | Very large (10,000+ actions) | Smaller ecosystem | Smaller ecosystem |
+| Self-hosted runners | Yes | No | Yes |
+| Documentation quality | Excellent | Good | Good |
+| Best suited for | GitHub-hosted projects of any size | Legacy open source projects | Large enterprise teams |
+
+**Decision:** GitHub Actions was the clear choice given the project is already on GitHub, the free tier covers all our needs, the YAML config lives directly in the repo alongside the code, and no external service linking is required.
+
+#### **Which Tests Run in a CI Build**
+
+Every CI build automatically runs the full backend test suite, which includes:
+
+- All Jest unit-style tests that verify individual route handler logic in isolation (e.g., correct status codes, correct response body structure)
+- All route integration tests via Supertest that simulate real HTTP requests to the Express app (e.g., `GET /locations`, `POST /login`, `POST /register`, `POST /ratings`, `GET /me`, `POST /logout`)
+- Both happy-path tests (valid inputs, expected success responses) and error-path tests (DB failures, duplicate entries, invalid credentials, missing auth tokens)
+
+#### **What Development Actions Trigger a CI Build**
+
+A CI build is triggered automatically on two events, defined in `.github/workflows/ci.yml`:
+
+- A **push** to any branch — ensures every commit pushed to the repository is tested immediately
+- A **pull request** opened or updated targeting the `main` branch — ensures all code proposed for merging into `main` passes the full test suite before it can be merged
 
 ---
 
