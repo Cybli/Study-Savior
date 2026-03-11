@@ -175,7 +175,7 @@ function App() {
   }
 
   return (
-    <div className="w-full h-screen flex flex-col">
+    <div className="w-full h-screen flex flex-col" style={{ height: '100dvh' }}>
       {/* Banner */}
       <div className="bg-linear-to-r from-orange-600 to-orange-500 p-4 shadow-lg flex justify-between items-center">
         <div>
