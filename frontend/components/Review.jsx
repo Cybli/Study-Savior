@@ -19,9 +19,9 @@ export function Review({ location, onClose, userId }) {
   const [success, setSuccess] = useState('');
 
   const ratingCategories = [
+    { key: 'crowded', label: 'Availability', description: 'How available are seats/spots?', stateKey: 'crowded_rating' },
     { key: 'noise', label: 'Quietness', description: 'How quiet is this location?', stateKey: 'noise_rating' },
-    { key: 'comfort', label: 'Comfort', description: 'How comfortable is this location?', stateKey: 'comfort_rating' },
-    { key: 'crowded', label: 'Availability', description: 'How available are seats/spots?', stateKey: 'crowded_rating' }
+    { key: 'comfort', label: 'Comfort', description: 'How comfortable is this location?', stateKey: 'comfort_rating' }
   ];
 
   const handleRatingClick = (category, value) => {
