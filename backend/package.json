@@ -12,5 +12,8 @@
   "devDependencies": {
     "jest": "^30.3.0",
     "supertest": "^7.2.2"
+  },
+  "scripts": {
+    "test": "jest"
   }
 }
