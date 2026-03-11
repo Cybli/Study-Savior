@@ -15,5 +15,10 @@
   },
   "scripts": {
     "test": "jest"
-  }
+  },
+  "jest": {
+      "moduleNameMapper": {
+        "./dbconnector": "<rootDir>/__mocks__/dbconnector.js"
+      }
+    }
 }
