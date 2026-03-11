@@ -200,3 +200,63 @@ describe('POST /register', () => {
         expect(res.statusCode).toBe(500);
     });
 });
+
+// =============================================================================
+// POST /login
+// =============================================================================
+describe('POST /login', () => {
+  it('logs in with valid credentials (200)', async () => {
+    // bcrypt is NOT mocked — we pre-hash the password so the real compare works
+    const bcrypt = require('bcrypt');
+    const hash = await bcrypt.hash('password123', 10);
+    // hashes the actual password "123"
+
+    pool.query.mockResolvedValueOnce([[
+      { id_user: 1, username_user: 'developer', hashedpass_user: hash }
+      // mocks a response from the database, will return this object when pool.query is next called.
+    ]]);
+
+    const res = await request(app)
+      .post('/login')
+      .send({ username: 'developer', password: 'password123' });
+
+    expect(res.statusCode).toBe(200);
+    // If we don't get a 200 code back, something went wrong with out login function
+    expect(res.body).toHaveProperty('message', 'Login successful');
+    expect(res.body).toHaveProperty('username', 'developer');
+    // make sure that we have the user data
+    // auth cookie should be set
+    expect(res.headers['set-cookie']).toBeDefined();
+  });
+
+  it('rejects unknown username (401)', async () => {
+    pool.query.mockResolvedValueOnce([[]]); 
+    // immitates no user being returned from the DB, as there's no user with that name
+
+    const res = await request(app)
+      .post('/login')
+      .send({ username: 'nobody', password: 'password123' });
+
+    expect(res.statusCode).toBe(401);
+    // expect an unauthorized access status code
+    expect(res.body).toHaveProperty('error', 'Invalid username or password');
+    // and expect the response to state that it's invalid
+  });
+
+  it('rejects wrong password (401)', async () => {
+    const bcrypt = require('bcrypt');
+    const hash = await bcrypt.hash('correctpassword', 10);
+
+    pool.query.mockResolvedValueOnce([[
+      { id_user: 1, username_user: 'developer', hashedpass_user: hash }
+    ]]);
+    // very similar to the above, nonexistant user, with same response, just with an incorrect password instead
+
+    const res = await request(app)
+      .post('/login')
+      .send({ username: 'developer', password: 'wrongpassword' });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body).toHaveProperty('error', 'Invalid username or password');
+  });
+});
