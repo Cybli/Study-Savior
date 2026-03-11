@@ -2,7 +2,8 @@
 node_modules/
 
 #Database Login
-dbconnector.js
+backend/dbconnector.js
+!backend/__mocks__/dbconnector.js
 
 #Environement Vars
 .env
