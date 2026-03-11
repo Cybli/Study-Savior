@@ -533,16 +533,18 @@ To enforce we will go over code before commits and have teammates review for iss
 
 #### **Test Automation**
 
-We use **[Jest](https://jestjs.io/)** as our test automation framework for our backend.
+We use **[Jest](https://jestjs.io/)** as our test automation framework along with [Supertest](https://www.npmjs.com/package/supertest)  HTTP route testing on our backend.
 
-**Why Jest?**
+- **Jest** - JavaScript testing framework that handles unit and integration tests
+- **Supertest** Allows HTTP requests to be made to our Express app without spinning up a live server
 
+**Why Jest and Supertest?**
 
  **Familiarity** — Jest is the most widely used JavaScript testing framework and integrates naturally with Node.js projects
 - **Zero config** — Works out of the box with no complex setup required
 - **Built-in coverage** — Jest includes code coverage reporting without needing additional tools
 - **Async support** — Handles async/await testing natively, which is essential for testing database queries and API routes
-- **Consistency** — Since the project is already fully JavaScript (Node.js backend, React frontend), Jest can test both without switching frameworks
+- **Supertest integration** — Supertest works seamlessly with Express and Jest, allowing testing without a live server
 
 
 ### CI Service: GitHub Actions
@@ -577,6 +579,10 @@ We use **GitHub Actions** as our CI service. The repository is hosted on GitHub 
 Every CI build runs:
 - All Jest unit tests
 - All route integration tests via supertest
+
+**What Tests Run in a CI Build**
+
+Every CI build automatically runs the full backend test suite
 
 **What Triggers a CI Build**
 
