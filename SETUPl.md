@@ -1,4 +1,4 @@
-# Study Savior — User Manual
+# Study Savior — SETUP.md/User Manual
 
 > **Group 10:** Sophie Peroutka, Beck Johnson, Samuel Vernick, Nat Rurka  
 > **Repository:** https://github.com/Cybli/Study-Savior
