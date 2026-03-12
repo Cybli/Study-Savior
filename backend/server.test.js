@@ -260,3 +260,51 @@ describe('POST /login', () => {
     expect(res.body).toHaveProperty('error', 'Invalid username or password');
   });
 });
+
+
+// =============================================================================
+// Test GET /me
+// =============================================================================
+describe('GET /me', () => {
+  // Try getting user credentials with no cookie
+  it('returns 401 when no auth cookie is present', async () => {
+    // sends a get request with no cookie token
+    const res = await request(app).get('/me');
+
+    // expect response to reject invalid login
+    expect(res.statusCode).toBe(401);
+    expect(res.body).toHaveProperty('error', 'Not logged in');
+  });
+
+  // Try getting user credentials with valid cookies 
+  it('returns user info with a valid token (200)', async () => {
+    // Generate a real token to send as a cookie
+    const jwt = require('jsonwebtoken');
+    const token = jwt.sign(
+      { id_user: 1, username: 'sophie' },
+      'your-secret-key',  // must match JWT_SECRET in server.js
+      { expiresIn: '8h' }
+    );
+
+    // send token with valid secret key
+    const res = await request(app)
+      .get('/me')
+      .set('Cookie', `auth=${token}`);
+
+    // expect response to accept and verify user credentials
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty('message', 'Verification successful');
+  });
+  
+  // Try getting user credentials with invalid cookie
+  it('returns 401 for an expired/invalid token', async () => {
+    // generate and send fake token
+    const res = await request(app)
+      .get('/me')
+      .set('Cookie', 'auth=invalidtoken');
+
+    // expect response to reject invalid login
+    expect(res.statusCode).toBe(401);
+    expect(res.body).toHaveProperty('error', 'Invalid or expired token');
+  });
+});
