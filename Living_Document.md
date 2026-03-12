@@ -562,7 +562,7 @@ We use **GitHub Actions** as our CI service. The repository is hosted on GitHub 
 
 | Feature | GitHub Actions | Travis CI | CircleCI |
 |---------|---------------|-----------|----------|
-| GitHub integration | Native |  ood | Good |
+| GitHub integration | Native | Good | Good |
 | Free tier | Free for public repos | Limited free tier | Limited free tier |
 | Setup complexity |  Low | Low |  Medium |
 | Configuration format | YAML | YAML | YAML |
@@ -605,24 +605,11 @@ Outline a plan for developing documentation that you plan to deliver with the sy
 *  Across all areas of our application’s files we will comment our code thoroughly and in line with the coding guidelines outlined previously.  
 * These comments will be made with the expectation that other members of our team will be able to comb through code they have not written and effectively glean what the purpose of each piece is/will be.
 
+#### **Step 2: Developer Documentation**
 
-#### **Step 2: User Help Page**
-
- This will be a page that is easily accessible from our main site which will document the steps necessary for all common actions that users will be taking. Including, but not limited to:  
-  * Account Creation/Deletion  
-  * Posting new study locations  
-  * Interacting with existing study locations  
-    * Commenting  
-    * Editing  
-    * Rating  
-    * Checking In(?)   
-  * Utilizing the interactive map  
-  * Possible Social Features (stretch goal)
-
-#### **Step 3: Optional Pop-Ups on all pages**
-
-* This will be a feature that will cover everything listed in the User Help Page but will be situated throughout our application as small question mark buttons next to buttons that trigger common actions.  
-* They will create a small pop-up with a shortened explanation of what the action about to be taken is and a link to the help page in case more information is desired.
+* In addition to thorough commenting, we will maintain multiple .md documents within our GitHub (eventually all merging to become INSTALL.md and SETUP.md). These documents will contain a detailed overview of how to run our application on a local machine, and how
+launch it onto a server to leave up indefinitely.
+* These documents will also cover how to run tests on our application once someone has downloaded our codebase onto a local machine or server.
 
 ## **Reflection**
 
