@@ -608,7 +608,7 @@ Outline a plan for developing documentation that you plan to deliver with the sy
 #### **Step 2: Developer Documentation**
 
 * In addition to thorough commenting, we will maintain multiple .md documents within our GitHub (eventually all merging to become INSTALL.md and SETUP.md). These documents will contain a detailed overview of how to run our application on a local machine, and how
-launch it onto a server to leave up indefinitely.
+to launch it onto a server to leave up indefinitely.
 * These documents will also cover how to run tests on our application once someone has downloaded our codebase onto a local machine or server.
 
 ## **Reflection**
