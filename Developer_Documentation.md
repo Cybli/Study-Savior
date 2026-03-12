@@ -1,7 +1,10 @@
-# Study Savior — Developer Documentation
+# Study Savior — Developer Documentation/INSTALL.md
 
 > **Group 10:** Sophie Peroutka, Beck Johnson, Samuel Vernick, Nat Rurka  
 > **Repository:** https://github.com/Cybli/Study-Savior
+
+## Accessing the Hosted Version ##
+[```http://flip4.engr.oregonstate.edu:4000/```](http://flip4.engr.oregonstate.edu:4000/)
 
 ---
 
