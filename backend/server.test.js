@@ -6,6 +6,11 @@
 
 const request = require('supertest');
 const { query } = require('./dbconnector');
+jest.mock('jsonwebtoken', () => ({
+  sign: jest.fn(),
+  verify: jest.fn(),
+}));
+const jwt = require('jsonwebtoken');
 
 // =========================
 // Mock the Database
@@ -13,7 +18,7 @@ const { query } = require('./dbconnector');
 
 // Intersept all calls to dbconnector to the mock db
 jest.mock('./dbconnector', () => ({
-    query: jest.fn()
+  query: jest.fn()
 }))
 
 // Import both the dbconnector and the backend server
@@ -22,7 +27,7 @@ const app = require('./server');
 
 // Between each test reset the mocks
 beforeEach(() => {
-    jest.clearAllMocks()
+  jest.clearAllMocks()
 })
 
 
@@ -31,37 +36,37 @@ beforeEach(() => {
 // =========================
 
 describe('GET /locations', () => {
-    //Try passing good locations
-    it('returns all locations with lat/lang (200)', async () => {
-        //Create two fake locations
-        const fakeLocations = [
-            { id_location: 1, name_location: 'Library', lat: 44.56, lng: -123.27 },
-            { id_location: 2, name_location: 'MU',      lat: 44.57, lng: -123.28 },
-        ];
-        //Pretend the database successfully returned the fake locations
-        pool.query.mockResolvedValueOnce([fakeLocations]);
-        
-        //Request locations from sever.js
-        const res = await request(app).get('/locations');
+  //Try passing good locations
+  it('returns all locations with lat/lang (200)', async () => {
+    //Create two fake locations
+    const fakeLocations = [
+      { id_location: 1, name_location: 'Library', lat: 44.56, lng: -123.27 },
+      { id_location: 2, name_location: 'MU',    lat: 44.57, lng: -123.28 },
+    ];
+    //Pretend the database successfully returned the fake locations
+    pool.query.mockResolvedValueOnce([fakeLocations]);
+    
+    //Request locations from sever.js
+    const res = await request(app).get('/locations');
 
-        //Expected outputs
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toHaveLength(2);
-        expect(res.body[0]).toHaveProperty('name_location', 'Library');
-    });
+    //Expected outputs
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveLength(2);
+    expect(res.body[0]).toHaveProperty('name_location', 'Library');
+  });
 
-    //The datase is unreachable
-    it('returns 500 on DB error', async () => {
-        //Pretend the database cannot be reached
-        pool.query.mockRejectedValueOnce(new Error('DB connection failed'));
+  //The datase is unreachable
+  it('returns 500 on DB error', async () => {
+    //Pretend the database cannot be reached
+    pool.query.mockRejectedValueOnce(new Error('DB connection failed'));
 
-        //Request locations from sever.js
-        const res = await request(app).get('/locations');
+    //Request locations from sever.js
+    const res = await request(app).get('/locations');
 
-        //Expected outputs
-        expect(res.statusCode).toBe(500);
-        expect(res.body).toHaveProperty('error');
-    });
+    //Expected outputs
+    expect(res.statusCode).toBe(500);
+    expect(res.body).toHaveProperty('error');
+  });
 });
 
 // =========================
@@ -69,44 +74,44 @@ describe('GET /locations', () => {
 // =========================
 
 describe('GET /locations/:id', () => {
-    //Try passing a good location
-    it('returns a single location (200)', async () => {
-        //Create a good location
-        const fakeLocation = { id_location: 1, name_location: 'Library' };
-        //Pretend the database successfully returned the fake locations
-        pool.query.mockResolvedValueOnce([[fakeLocation]]);
+  //Try passing a good location
+  it('returns a single location (200)', async () => {
+    //Create a good location
+    const fakeLocation = { id_location: 1, name_location: 'Library' };
+    //Pretend the database successfully returned the fake locations
+    pool.query.mockResolvedValueOnce([[fakeLocation]]);
 
-        //Request the location with the ID 1 from server.js
-        const res = await request(app).get('/locations/1');
+    //Request the location with the ID 1 from server.js
+    const res = await request(app).get('/locations/1');
 
-        //Expected outputs
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toHaveProperty('id_location', 1);
-    });
+    //Expected outputs
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty('id_location', 1);
+  });
 
-    //Try passing a bad location
-    it('returns 404 when location not found', async () => {
-        pool.query.mockResolvedValueOnce([[]]); // No locations
-        
-        //Try and get location with ID 999
-        const res = await request(app).get('/locations/999');
+  //Try passing a bad location
+  it('returns 404 when location not found', async () => {
+    pool.query.mockResolvedValueOnce([[]]); // No locations
+    
+    //Try and get location with ID 999
+    const res = await request(app).get('/locations/999');
 
-        //Expected outputs
-        expect(res.statusCode).toBe(404);
-        expect(res.body).toHaveProperty('error', 'Location not found');
-    });
+    //Expected outputs
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toHaveProperty('error', 'Location not found');
+  });
 
-    //The datase is unreachable
-    it('returns 500 on DB error', async () => {
-        //Pretend the database cannot be reached
-        pool.query.mockRejectedValueOnce(new Error('DB error'));
+  //The datase is unreachable
+  it('returns 500 on DB error', async () => {
+    //Pretend the database cannot be reached
+    pool.query.mockRejectedValueOnce(new Error('DB error'));
 
-        //Request the location with the ID 1 from server.js
-        const res = await request(app).get('/locations/1');
+    //Request the location with the ID 1 from server.js
+    const res = await request(app).get('/locations/1');
 
-        //Expected outputs
-        expect(res.statusCode).toBe(500);
-    });
+    //Expected outputs
+    expect(res.statusCode).toBe(500);
+  });
 });
 
 // =========================
@@ -114,38 +119,38 @@ describe('GET /locations/:id', () => {
 // =========================
 
 describe('GET /locations/:id/tags', () => {
-    //Try passing good tags
-    it('returns tags for a location (200)', async () => {
-        
-        //Make fake tags
-        const fakeTags = [
-            { id_tag: 1, name_tag: 'Quiet' },
-            { id_tag: 2, name_tag: 'WiFi'  },
-        ];
+  //Try passing good tags
+  it('returns tags for a location (200)', async () => {
+    
+    //Make fake tags
+    const fakeTags = [
+      { id_tag: 1, name_tag: 'Quiet' },
+      { id_tag: 2, name_tag: 'WiFi'  },
+    ];
 
-        //Pretend the databse correctly returned the tags
-        pool.query.mockResolvedValueOnce([fakeTags]);
+    //Pretend the databse correctly returned the tags
+    pool.query.mockResolvedValueOnce([fakeTags]);
 
-        //Request the tags from server.js
-        const res = await request(app).get('/locations/1/tags');
+    //Request the tags from server.js
+    const res = await request(app).get('/locations/1/tags');
 
-        //Expected outputs
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toHaveLength(2);
-        expect(res.body[0]).toHaveProperty('name_tag', 'Quiet');
-    });
+    //Expected outputs
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveLength(2);
+    expect(res.body[0]).toHaveProperty('name_tag', 'Quiet');
+  });
 
-    //Try passing no tags
-    it('returns empty array when no tags exist (200)', async () => {
-        pool.query.mockResolvedValueOnce([[]]);
+  //Try passing no tags
+  it('returns empty array when no tags exist (200)', async () => {
+    pool.query.mockResolvedValueOnce([[]]);
 
-        //Try and get the empty tags from server.js
-        const res = await request(app).get('/locations/1/tags');
+    //Try and get the empty tags from server.js
+    const res = await request(app).get('/locations/1/tags');
 
-        //Expected outputs
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toHaveLength(0);
-    });
+    //Expected outputs
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveLength(0);
+  });
 });
 
 // =========================
@@ -153,52 +158,52 @@ describe('GET /locations/:id/tags', () => {
 // =========================
 
 describe('POST /register', () => {
-    //Try passing valid username
-    it('creates a new user successfully (200)', async () => {
-        //Pretend username was valid and insert worked
-        pool.query
-        .mockResolvedValueOnce([[]])          
-        .mockResolvedValueOnce([{ insertId: 1 }]); 
-        const res = await request(app)
-        
-        //Send the username and password to server.js
-        .post('/register')
-        .send({ username: 'sophie', password: 'password123' });
+  //Try passing valid username
+  it('creates a new user successfully (200)', async () => {
+    //Pretend username was valid and insert worked
+    pool.query
+    .mockResolvedValueOnce([[]])      
+    .mockResolvedValueOnce([{ insertId: 1 }]); 
+    const res = await request(app)
+    
+    //Send the username and password to server.js
+    .post('/register')
+    .send({ username: 'sophie', password: 'password123' });
 
-        //Expected outputs
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toHaveProperty('message', 'Account created successfully');
-    });
+    //Expected outputs
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty('message', 'Account created successfully');
+  });
 
-    //Try passing an invald username
-    it('rejects a duplicate username (400)', async () => {
+  //Try passing an invald username
+  it('rejects a duplicate username (400)', async () => {
 
-        //Pretend the username already exists
-        pool.query.mockResolvedValueOnce([[{ id_user: 1, username_user: 'sophie_dev' }]]);
+    //Pretend the username already exists
+    pool.query.mockResolvedValueOnce([[{ id_user: 1, username_user: 'sophie_dev' }]]);
 
-        //Request to add a user with the same name from server.js
-        const res = await request(app)
-        .post('/register')
-        .send({ username: 'sophie_dev', password: 'password123' });
+    //Request to add a user with the same name from server.js
+    const res = await request(app)
+    .post('/register')
+    .send({ username: 'sophie_dev', password: 'password123' });
 
-        //Expected outputs
-        expect(res.statusCode).toBe(400);
-        expect(res.body).toHaveProperty('error', 'Username already taken');
-    });
+    //Expected outputs
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty('error', 'Username already taken');
+  });
 
-    //The datase is unreachable
-    it('returns 500 on DB error', async () => {
-        //Pretend the database cannot be reached
-        pool.query.mockRejectedValueOnce(new Error('DB error'));
+  //The datase is unreachable
+  it('returns 500 on DB error', async () => {
+    //Pretend the database cannot be reached
+    pool.query.mockRejectedValueOnce(new Error('DB error'));
 
-        //Try and reach the database to register a user
-        const res = await request(app)
-        .post('/register')
-        .send({ username: 'sophie', password: 'password123' });
+    //Try and reach the database to register a user
+    const res = await request(app)
+    .post('/register')
+    .send({ username: 'sophie', password: 'password123' });
 
-        //Expected output
-        expect(res.statusCode).toBe(500);
-    });
+    //Expected output
+    expect(res.statusCode).toBe(500);
+  });
 });
 
 // =============================================================================
@@ -206,58 +211,58 @@ describe('POST /register', () => {
 // =============================================================================
 describe('POST /login', () => {
   it('logs in with valid credentials (200)', async () => {
-    // bcrypt is NOT mocked — we pre-hash the password so the real compare works
-    const bcrypt = require('bcrypt');
-    const hash = await bcrypt.hash('password123', 10);
-    // hashes the actual password "123"
+  // bcrypt is NOT mocked — we pre-hash the password so the real compare works
+  const bcrypt = require('bcrypt');
+  const hash = await bcrypt.hash('password123', 10);
+  // hashes the actual password "123"
 
-    pool.query.mockResolvedValueOnce([[
-      { id_user: 1, username_user: 'developer', hashedpass_user: hash }
-      // mocks a response from the database, will return this object when pool.query is next called.
-    ]]);
+  pool.query.mockResolvedValueOnce([[
+    { id_user: 1, username_user: 'developer', hashedpass_user: hash }
+    // mocks a response from the database, will return this object when pool.query is next called.
+  ]]);
 
-    const res = await request(app)
-      .post('/login')
-      .send({ username: 'developer', password: 'password123' });
+  const res = await request(app)
+    .post('/login')
+    .send({ username: 'developer', password: 'password123' });
 
-    expect(res.statusCode).toBe(200);
-    // If we don't get a 200 code back, something went wrong with out login function
-    expect(res.body).toHaveProperty('message', 'Login successful');
-    expect(res.body).toHaveProperty('username', 'developer');
-    // make sure that we have the user data
-    // auth cookie should be set
-    expect(res.headers['set-cookie']).toBeDefined();
+  expect(res.statusCode).toBe(200);
+  // If we don't get a 200 code back, something went wrong with out login function
+  expect(res.body).toHaveProperty('message', 'Login successful');
+  expect(res.body).toHaveProperty('username', 'developer');
+  // make sure that we have the user data
+  // auth cookie should be set
+  expect(res.headers['set-cookie']).toBeDefined();
   });
 
   it('rejects unknown username (401)', async () => {
-    pool.query.mockResolvedValueOnce([[]]); 
-    // immitates no user being returned from the DB, as there's no user with that name
+  pool.query.mockResolvedValueOnce([[]]); 
+  // immitates no user being returned from the DB, as there's no user with that name
 
-    const res = await request(app)
-      .post('/login')
-      .send({ username: 'nobody', password: 'password123' });
+  const res = await request(app)
+    .post('/login')
+    .send({ username: 'nobody', password: 'password123' });
 
-    expect(res.statusCode).toBe(401);
-    // expect an unauthorized access status code
-    expect(res.body).toHaveProperty('error', 'Invalid username or password');
-    // and expect the response to state that it's invalid
+  expect(res.statusCode).toBe(401);
+  // expect an unauthorized access status code
+  expect(res.body).toHaveProperty('error', 'Invalid username or password');
+  // and expect the response to state that it's invalid
   });
 
   it('rejects wrong password (401)', async () => {
-    const bcrypt = require('bcrypt');
-    const hash = await bcrypt.hash('correctpassword', 10);
+  const bcrypt = require('bcrypt');
+  const hash = await bcrypt.hash('correctpassword', 10);
 
-    pool.query.mockResolvedValueOnce([[
-      { id_user: 1, username_user: 'developer', hashedpass_user: hash }
-    ]]);
-    // very similar to the above, nonexistant user, with same response, just with an incorrect password instead
+  pool.query.mockResolvedValueOnce([[
+    { id_user: 1, username_user: 'developer', hashedpass_user: hash }
+  ]]);
+  // very similar to the above, nonexistant user, with same response, just with an incorrect password instead
 
-    const res = await request(app)
-      .post('/login')
-      .send({ username: 'developer', password: 'wrongpassword' });
+  const res = await request(app)
+    .post('/login')
+    .send({ username: 'developer', password: 'wrongpassword' });
 
-    expect(res.statusCode).toBe(401);
-    expect(res.body).toHaveProperty('error', 'Invalid username or password');
+  expect(res.statusCode).toBe(401);
+  expect(res.body).toHaveProperty('error', 'Invalid username or password');
   });
 });
 
@@ -266,45 +271,118 @@ describe('POST /login', () => {
 // Test GET /me
 // =============================================================================
 describe('GET /me', () => {
+  const validToken = 'test_token';
+
   // Try getting user credentials with no cookie
   it('returns 401 when no auth cookie is present', async () => {
-    // sends a get request with no cookie token
-    const res = await request(app).get('/me');
+  // sends a get request with no cookie token
+  const res = await request(app).get('/me');
 
-    // expect response to reject invalid login
-    expect(res.statusCode).toBe(401);
-    expect(res.body).toHaveProperty('error', 'Not logged in');
+  // expect response to reject invalid login
+  expect(res.statusCode).toBe(401);
+  expect(res.body).toHaveProperty('error', 'Not logged in');
   });
 
   // Try getting user credentials with valid cookies 
   it('returns user info with a valid token (200)', async () => {
-    // Generate a real token to send as a cookie
-    const jwt = require('jsonwebtoken');
-    const token = jwt.sign(
-      { id_user: 1, username: 'sophie' },
-      'your-secret-key',  // must match JWT_SECRET in server.js
-      { expiresIn: '8h' }
-    );
+  // Mock jwt.verify to return a valid decoded user
+  jwt.verify.mockReturnValue({ id_user: 1, username: 'sophie' });
 
-    // send token with valid secret key
-    const res = await request(app)
-      .get('/me')
-      .set('Cookie', `auth=${token}`);
+  // send token with valid secret key
+  const res = await request(app)
+    .get('/me')
+    .set('Cookie', `auth=${validToken}`);
 
-    // expect response to accept and verify user credentials
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toHaveProperty('message', 'Verification successful');
+  // expect response to accept and verify user credentials
+  expect(res.statusCode).toBe(200);
+  expect(res.body).toHaveProperty('message', 'Verification successful');
   });
   
   // Try getting user credentials with invalid cookie
   it('returns 401 for an expired/invalid token', async () => {
-    // generate and send fake token
-    const res = await request(app)
-      .get('/me')
-      .set('Cookie', 'auth=invalidtoken');
+  // Mock jwt.verify to throw, simulating an invalid/expired token
+  jwt.verify.mockImplementation(() => { throw new Error('invalid token'); });
 
-    // expect response to reject invalid login
-    expect(res.statusCode).toBe(401);
-    expect(res.body).toHaveProperty('error', 'Invalid or expired token');
+  // generate and send fake token
+  const res = await request(app)
+    .get('/me')
+    .set('Cookie', 'auth=invalidtoken');
+
+  // expect response to reject invalid login
+  expect(res.statusCode).toBe(401);
+  expect(res.body).toHaveProperty('error', 'Invalid or expired token');
+  });
+});
+
+// =============================================================================
+// POST /ratings
+// =============================================================================
+
+describe('POST /ratings', () => {
+  //Define Valid Token for authorization
+  const validToken = 'test_token';
+  
+  //Submitting a Rating
+  it('submits a rating successfully (200)', async () => {
+    // Mock jwt.verify to return a valid user
+    jwt.verify.mockReturnValue({ id_user: 8 });
+  
+    //Mock pool.query calls
+    pool.query
+    .mockResolvedValueOnce([{ insertId: 1 }])
+    .mockResolvedValueOnce([[{ avg_noise: 4, avg_comfort: 3, avg_crowded: 2, avg_overall: 3 }]])
+    .mockResolvedValueOnce([{ affectedRows: 1 }]);
+    
+    //Send post request with valid information
+    const res = await request(app)
+    .post('/ratings')
+    .set('Cookie', `auth=${validToken}`)
+    .send({ id_location: 5, noise_rating: 5, comfort_rating: 5, crowded_rating: 5 });
+  
+    //Expect succesful status code and message
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty('message', 'Rating submitted successfully');
+  });
+  
+  //Try Submitting a duplicate rating
+  it('handles duplicate review submissions (400)', async () => {
+    //Mock jwt.verify to return a valid user
+    jwt.verify.mockReturnValue({ id_user: 10 });
+  
+    //Create Error
+    const dupError = new Error('Duplicate entry');
+    dupError.code = 'ER_DUP_ENTRY';
+    //Mock the database throwing this error
+    pool.query.mockRejectedValueOnce(dupError);
+  
+    //Request the post with valid information
+    const res = await request(app)
+    .post('/ratings')
+    .set('Cookie', `auth=${validToken}`)
+    .send({ id_location: 5, noise_rating: 5, comfort_rating: 5, crowded_rating: 5 });
+  
+    //Expect this code to return a 400 with "you have already reviewed" error
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty('error', 'You have already reviewed this location');
+  });
+  
+  //Submitting invalid rating
+  it('rejects invalid ratings (400)', async () => {
+    // Mock jwt.verify to return a valid user
+    jwt.verify.mockReturnValue({ id_user: 8 });
+  
+    //Mock database with invalid ratings
+    pool.query.mockRejectedValueOnce([[ 
+    { id_location: 5, noise_rating: 6, comfort_rating: 6, crowded_rating: 6 }
+    ]]);
+    
+    //Expect code to return a 400 with a "Ratings must be between 1 and 5" error
+    const res = await request(app)
+    .post('/ratings')
+    .set('Cookie', `auth=${validToken}`)
+    .send({ id_location: 5, noise_rating: 6, comfort_rating: 6, crowded_rating: 6 });
+  
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty('error', 'Ratings must be between 1 and 5');
   });
 });
