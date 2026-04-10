@@ -29,8 +29,8 @@ Link to active website: http://flip4.engr.oregonstate.edu:4000/
 
 | Document | Description |
 |----------|-------------|
-| [User Manual](User_Manual.md) | How to install, run, and use Study Savior |
-| [Developer Documentation](Developer_Documentation.md) | How to contribute, build, and test |
+| [User Manual](SETUP.md) | How to install, run, and use Study Savior |
+| [Developer Documentation](INSTALL.md) | How to contribute, build, and test |
 | [Living Document](Living_Document.md) | Project notes, decisions, and team tracking |
 
 ---
